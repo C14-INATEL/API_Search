@@ -7,6 +7,6 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String token;
+    private String tokens;
     private Date date;
 }
