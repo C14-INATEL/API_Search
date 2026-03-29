@@ -1,4 +1,4 @@
-package com.api_search.project.accounts;
+package com.api_search.project.entity;
 
 public class Accounts {
     private int ID;
