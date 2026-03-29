@@ -31,4 +31,8 @@ public class UserController {
         return userService.searchAll();
     }
 
+    @GetMapping("{id}/exist")
+    public boolean existById(@PathVariable Integer id){
+        return userService.existsByid(id);
+    }
 }

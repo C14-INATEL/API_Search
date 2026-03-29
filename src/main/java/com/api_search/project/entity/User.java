@@ -1,25 +1,87 @@
-package com.api_search.project.user;
+package com.api_search.project.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonTypeId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
-    private String email;
-    private String password;
     private String token;
-    private Date date;
+
+    @Column(name = "email_to_in")
+    private String email;
+
+    @Column(name = "password_to_in")
+    private String password;
+
+    @Column(name = "date_to_in")
+    private LocalDateTime date;
+
+    @Column(name = "data_update_sign")
+    private LocalDateTime date_update;
 
     // getters and setters
 
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getDate_update() {
+        return date_update;
+    }
+
+    public void setDate_update(LocalDateTime date_update) {
+        this.date_update = date_update;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
