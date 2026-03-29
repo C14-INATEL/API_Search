@@ -28,7 +28,6 @@ public class User {
 
     // getters and setters
 
-
     public Integer getId() {
         return id;
     }
