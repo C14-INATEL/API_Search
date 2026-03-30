@@ -30,4 +30,12 @@ public class UserService {
     public boolean existsByid(Integer id) {
         return userRepository.existsById(id);
     }
+
+    public void deleteByid(Integer id){
+        userRepository.deleteById(id);
+    }
+
+    public void deleteALL(){
+        userRepository.deleteAll();
+    }
 }
