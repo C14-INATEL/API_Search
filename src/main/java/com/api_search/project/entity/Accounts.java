@@ -12,15 +12,21 @@ public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer account_ID;
-    private String description;
-    private String password_hash;
 
-    @Column(name = "address_to_in")
+    @Column(name = "user_id")
+    private Integer account_ID;
+
+    @Column(name = "email_monitored")
     private String address;
 
-    @Column(name = "status_to_in")
+    @Column(name = "account_monitored")
+    private String description;
+
+    @Column(name = "risk_status")
     private String status;
+
+    @Column(name = "hash_password")
+    private String password_hash;
 
     // Getters and Setters
 
