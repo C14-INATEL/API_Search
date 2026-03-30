@@ -21,7 +21,7 @@ public class UserController {
         userService.save(user);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public User searchById(@PathVariable Integer id){
         return userService.searchById(id);
     }
@@ -31,8 +31,28 @@ public class UserController {
         return userService.searchAll();
     }
 
-    @GetMapping("{id}/exist")
+    @GetMapping("/{id}/exist")
     public boolean existById(@PathVariable Integer id){
         return userService.existsByid(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id){
+        userService.deleteByid(id);
+    }
+
+    @DeleteMapping
+    public void deleteALL(){
+        userService.deleteALL();
+    }
+
+    @PutMapping("/{id}")
+    public void update(@PathVariable Integer id, @RequestBody User user){
+        user.setPassword(user.getPassword());
+        user.setName(user.getName());
+        user.setToken(user.getToken());
+        userService.save(user);
+    }
+
+
 }
