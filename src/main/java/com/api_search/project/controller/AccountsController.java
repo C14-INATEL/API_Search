@@ -12,18 +12,27 @@ public class AccountsController {
     private AccountsService accountsService;
 
     // Construtor
-    public AccountsController(AccountsService AccountsService) {this.AccountsService = AccountsService;}
+
+    public AccountsController(AccountsService accountsService) {
+        this.accountsService = accountsService;
+    }
 
     @PostMapping
-    public void save(@RequestBody Accounts Accounts){AccountsService.save(Accounts);}
+    public void save(@RequestBody Accounts Accounts){
+        accountsService.save(Accounts);}
 
     @GetMapping("{id}")
-    public Accounts searchById(@PathVariable Integer id){return AccountsService.searchById(id);}
+    public Accounts searchById(@PathVariable Integer id){
+        return accountsService.searchById(id);
+    }
 
     @GetMapping
-    public List<Accounts> search(){return AccountsService.searchAll();}
+    public List<Accounts> search(){
+        return accountsService.searchAll();
+    }
 
     @GetMapping("{id}/exist")
-    public boolean existById(@PathVariable Integer id){return AccountsService.existsByid(id);
+    public boolean existById(@PathVariable Integer id){
+        return accountsService.existsByid(id);
     }
 }
