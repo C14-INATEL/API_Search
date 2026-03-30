@@ -1,12 +1,11 @@
 package com.api_search.project.entity;
-
 import java.time.LocalDateTime;
 import java.util.Date;
-
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
