@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
-public class AccountsController {
+public class AccountsController{
     private AccountsService accountsService;
 
     // Construtor
