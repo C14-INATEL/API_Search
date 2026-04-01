@@ -59,13 +59,18 @@ public class UserController {
         user_update.setEmail(user.getEmail());
         return userService.saveObject(user_update);
     }
-
     @PutMapping("/{user_id}/update_passowrd")
+    public User updatePassword(@PathVariable Integer id, @RequestBody User user) {
+        User user_update = userService.searchById(id);
+        user_update.setPassword(user.getPassword());
+        return userService.saveObject(user_update);
+    }
+
+    @PutMapping("/{user_id}/update_token")
     public User updateToken(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setToken(user.getToken());
         return userService.saveObject(user_update);
     }
-
 
 }
