@@ -1,5 +1,6 @@
 package com.api_search.project.controller;
 
+import com.api_search.project.entity.Alert;
 import com.api_search.project.entity.User;
 import com.api_search.project.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
     @PostMapping
     public void save(@RequestBody User user){
         userService.save(user);
@@ -46,12 +46,25 @@ public class UserController {
         userService.deleteALL();
     }
 
-    @PutMapping("/{id}")
-    public void update(@PathVariable Integer id, @RequestBody User user){
-        user.setPassword(user.getPassword());
-        user.setName(user.getName());
-        user.setToken(user.getToken());
-        userService.save(user);
+    @PutMapping("/{user_id}/update_name")
+    public User updateName(@PathVariable Integer id, @RequestBody User user) {
+        User user_update = userService.searchById(id);
+        user_update.setName(user.getName());
+        return userService.saveObject(user_update);
+    }
+
+    @PutMapping("/{user_id}/email")
+    public User updateEmail(@PathVariable Integer id, @RequestBody User user) {
+        User user_update = userService.searchById(id);
+        user_update.setEmail(user.getEmail());
+        return userService.saveObject(user_update);
+    }
+
+    @PutMapping("/{user_id}/update_passowrd")
+    public User updateToken(@PathVariable Integer id, @RequestBody User user) {
+        User user_update = userService.searchById(id);
+        user_update.setToken(user.getToken());
+        return userService.saveObject(user_update);
     }
 
 
