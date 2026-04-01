@@ -30,4 +30,16 @@ public class AccountsService {
     public boolean existsByid(Integer id) {
         return accountsRepository.existsById(id);
     }
+
+    public void deleteByid(Integer id){
+        accountsRepository.deleteById(id);
+    }
+
+    public void deleteALL(){
+        accountsRepository.deleteAll();
+    }
+
+    public Accounts saveAccount(Accounts account){
+        return accountsRepository.save(account);
+    }
 }

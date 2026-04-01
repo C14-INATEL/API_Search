@@ -35,4 +35,6 @@ public class UserController {
     public boolean existById(@PathVariable Integer id){
         return userService.existsByid(id);
     }
+
+
 }
