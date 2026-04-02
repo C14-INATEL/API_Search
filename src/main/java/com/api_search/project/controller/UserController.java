@@ -53,7 +53,7 @@ public class UserController {
         return userService.saveObject(user_update);
     }
 
-    @PutMapping("/{user_id}/email")
+    @PutMapping("/{user_id}/update_email")
     public User updateEmail(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setEmail(user.getEmail());
