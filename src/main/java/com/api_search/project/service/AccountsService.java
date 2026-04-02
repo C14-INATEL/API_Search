@@ -1,6 +1,7 @@
 package com.api_search.project.service;
 
 import com.api_search.project.entity.Accounts;
+import com.api_search.project.entity.Alert;
 import com.api_search.project.repository.AccountsRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -19,6 +20,10 @@ public class AccountsService {
         accountsRepository.save(accounts);
     }
 
+    public Accounts saveObject(Accounts accounts) {
+        return accountsRepository.save(accounts);
+    }
+
     public Accounts searchById(Integer id){
         return accountsRepository.findById(id).orElse(null);
     }
@@ -29,5 +34,13 @@ public class AccountsService {
 
     public boolean existsByid(Integer id) {
         return accountsRepository.existsById(id);
+    }
+
+    public void deleteByid(Integer id){
+        accountsRepository.deleteById(id);
+    }
+
+    public void deleteALL(){
+        accountsRepository.deleteAll();
     }
 }
