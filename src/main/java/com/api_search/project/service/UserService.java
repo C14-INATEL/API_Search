@@ -19,6 +19,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User saveObject(User user) {
+        return userRepository.save(user);
+    }
+
     public User searchById(Integer id){
         return userRepository.findById(id).orElse(null);
     }
@@ -30,4 +34,13 @@ public class UserService {
     public boolean existsByid(Integer id) {
         return userRepository.existsById(id);
     }
+
+    public void deleteByid(Integer id){
+        userRepository.deleteById(id);
+    }
+
+    public void deleteALL(){
+        userRepository.deleteAll();
+    }
+
 }

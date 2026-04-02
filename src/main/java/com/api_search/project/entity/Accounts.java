@@ -28,6 +28,16 @@ public class Accounts {
     @Column(name = "hash_password")
     private String password_hash;
 
+    // constructor
+    public Accounts(Integer id, Integer account_ID, String address, String description, String password_hash, String status) {
+        this.id = id;
+        this.account_ID = account_ID;
+        this.address = address;
+        this.description = description;
+        this.password_hash = password_hash;
+        this.status = status;
+    }
+
     // Getters and Setters
 
     public Integer getId() {
