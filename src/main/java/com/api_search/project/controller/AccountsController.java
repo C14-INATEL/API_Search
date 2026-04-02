@@ -46,24 +46,32 @@ public class AccountsController{
     public void deleteALL(){
         accountsService.deleteALL();
     }
-    @PutMapping("/{user_id}/update_email")
+
+    @PutMapping("/{user_id}/email")
     public Accounts updateEmail(@PathVariable Integer id, @RequestBody Accounts accounts) {
-        |Accounts alert_update = alertService.searchById(id);
-        alert_update.setEmail(alert.getEmail());
-        return alertService.saveObject(alert_update);
+        Accounts accounts_update = accountsService.searchById(id);
+        accounts_update.setAddress(accounts_update.getAddress());
+        return accountsService.saveObject(accounts_update);
     }
 
-    @PutMapping("/{user_id}/update_leak")
-    public Alert updateLeak(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
-        alert_update.setLeak(alert.getLeak());
-        return alertService.saveObject(alert_update);
+    @PutMapping("/{user_id}/account")
+    public Accounts updateAccount(@PathVariable Integer id, @RequestBody Accounts accounts) {
+        Accounts accounts_update = accountsService.searchById(id);
+        accounts_update.setDescription(accounts.getDescription());
+        return accountsService.saveObject(accounts_update);
     }
 
-    @PutMapping("/{user_id}/risk_level")
-    public Alert updateRiskLevel(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
-        alert_update.setRisk_level(alert.getRisk_level());
-        return alertService.saveObject(alert_update);
+    @PutMapping("/{user_id}/status")
+    public Accounts updateRiskStatus(@PathVariable Integer id, @RequestBody Accounts accounts) {
+        Accounts accounts_update = accountsService.searchById(id);
+        accounts_update.setStatus(accounts.getStatus());
+        return accountsService.saveObject(accounts_update);
+    }
+
+    @PutMapping("/{user_id}/password")
+    public Accounts updateRiskPassword(@PathVariable Integer id, @RequestBody Accounts accounts) {
+        Accounts accounts_update = accountsService.searchById(id);
+        accounts_update.setPassword_hash(accounts.getPassword_hash());
+        return accountsService.saveObject(accounts_update);
     }
 }
