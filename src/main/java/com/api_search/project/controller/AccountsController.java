@@ -8,30 +8,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
-public class AccountsController {
+public class AccountsController{
     private AccountsService accountsService;
 
     // Construtor
 
-    public AccountsController(AccountsService accountsService){
+    public AccountsController(AccountsService accountsService) {
         this.accountsService = accountsService;
     }
 
     @PostMapping
-    public void save(@RequestBody Accounts Accounts) {
+    public void save(@RequestBody Accounts Accounts){
         accountsService.save(Accounts);}
 
     @GetMapping("{id}")
-    public Accounts searchById(@PathVariable Integer id) {
+    public Accounts searchById(@PathVariable Integer id){
         return accountsService.searchById(id);
     }
 
     @GetMapping
-    public List<Accounts> search() {
+    public List<Accounts> search(){
         return accountsService.searchAll();
     }
 
-    @GetMapping("{id}/exist" )
+    @GetMapping("{id}/exist")
     public boolean existById(@PathVariable Integer id){
         return accountsService.existsByid(id);
     }
@@ -46,15 +46,25 @@ public class AccountsController {
         accountsService.deleteALL();
     }
 
-    @PutMapping(value="/{id}")
-    public Accounts update(@PathVariable Integer id, @RequestBody Accounts accounts_before){
-        Accounts account_update = accountsService.searchById(id);
-        account_update.setAddress(accounts_before.getAddress());
-        account_update.setDescription(accounts_before.getDescription());
-        account_update.setStatus(accounts_before.getStatus());
-        account_update.setPassword_hash(accounts_before.getPassword_hash());
+    @PutMapping("/{id}/update_email")
+    public Accounts updateEmail(@PathVariable Integer id, @RequestBody Accounts account){
+        Accounts email_update = accountsService.searchById(id);
+        email_update.setAddress(account.getAddress());
+        return accountsService.saveAccount(account);
+    }
 
-        return accountsService.saveAccount(account_update);
+    @PutMapping("/{id}/update_description")
+    public Accounts updateDescription(@PathVariable Integer id, @RequestBody Accounts account){
+        Accounts description_update = accountsService.searchById(id);
+        description_update.setDescription(account.getDescription());
+        return accountsService.saveAccount(account);
+    }
+
+    @PutMapping("/{id}/update_password")
+    public Accounts updatePassword(@PathVariable Integer id, @RequestBody Accounts account){
+        Accounts password_update = accountsService.searchById(id);
+        password_update.setPassword_hash(account.getPassword_hash());
+        return accountsService.saveAccount(account);
     }
 
 

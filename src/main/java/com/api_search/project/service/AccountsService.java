@@ -19,6 +19,10 @@ public class AccountsService {
         accountsRepository.save(accounts);
     }
 
+    public Accounts saveAccount(Accounts account){
+        return accountsRepository.save(account);
+    }
+
     public Accounts searchById(Integer id){
         return accountsRepository.findById(id).orElse(null);
     }
@@ -37,9 +41,5 @@ public class AccountsService {
 
     public void deleteALL(){
         accountsRepository.deleteAll();
-    }
-
-    public Accounts saveAccount(Accounts account){
-        return accountsRepository.save(account);
     }
 }
