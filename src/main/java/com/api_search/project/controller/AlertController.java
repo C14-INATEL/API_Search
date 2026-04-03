@@ -62,7 +62,7 @@ public class AlertController {
         return alertService.saveObject(alert_update);
     }
 
-    @PutMapping("/{user_id}/risk_level")
+    @PutMapping("/{user_id}/update_risk_level")
     public Alert updateRiskLevel(@PathVariable Integer id, @RequestBody Alert alert) {
         Alert alert_update = alertService.searchById(id);
         alert_update.setRisk_level(alert.getRisk_level());
