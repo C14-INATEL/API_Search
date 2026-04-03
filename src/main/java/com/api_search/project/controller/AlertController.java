@@ -1,5 +1,6 @@
 package com.api_search.project.controller;
 
+
 import com.api_search.project.entity.Alert;
 import com.api_search.project.entity.User;
 import com.api_search.project.service.AlertService;
