@@ -23,7 +23,7 @@ public class Leakeds_emailController{
         leakeds_emailService.save(Leakeds_email);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Leakeds_email searchById(@PathVariable Integer id){
         return leakeds_emailService.searchById(id);
     }
@@ -33,12 +33,22 @@ public class Leakeds_emailController{
         return leakeds_emailService.searchAll();
     }
 
-    @GetMapping("{id}/exist")
+    @GetMapping("/{id}/exist")
     public boolean existById(@PathVariable Integer id){
         return leakeds_emailService.existByid(id);
     }
 
-    @PutMapping("{id}/update_email_id")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id){
+        leakeds_emailService.deleteByid(id);
+    }
+
+    @DeleteMapping
+    public void deleteALL(){
+        leakeds_emailService.deleteALL();
+    }
+
+    @PutMapping("/{id}/update_email_id")
     public Leakeds_email updateEmail_id(@PathVariable Integer id, @RequestBody Leakeds_email leakeds_email){
         Leakeds_email leakeds_email_update = leakeds_emailService.searchById(id);
         leakeds_email_update.setEmail_id(leakeds_email.getEmail_id());

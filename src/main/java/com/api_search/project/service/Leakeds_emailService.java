@@ -36,4 +36,12 @@ public class Leakeds_emailService {
         return  leakeds_emailRepository.existsById(id);
     }
 
+    public void deleteByid(Integer id){
+        leakeds_emailRepository.deleteById(id);
+    }
+
+    public void deleteALL(){
+        leakeds_emailRepository.deleteAll();
+    }
+
 }
