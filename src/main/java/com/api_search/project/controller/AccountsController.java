@@ -47,28 +47,28 @@ public class AccountsController{
         accountsService.deleteALL();
     }
 
-    @PutMapping("/{user_id}/email")
+    @PutMapping("/{id}/update_adress")
     public Accounts updateEmail(@PathVariable Integer id, @RequestBody Accounts accounts) {
         Accounts accounts_update = accountsService.searchById(id);
-        accounts_update.setAddress(accounts_update.getAddress());
+        accounts_update.setAddress(accounts.getAddress());
         return accountsService.saveObject(accounts_update);
     }
 
-    @PutMapping("/{user_id}/account")
+    @PutMapping("/{id}/update_description")
     public Accounts updateAccount(@PathVariable Integer id, @RequestBody Accounts accounts) {
         Accounts accounts_update = accountsService.searchById(id);
         accounts_update.setDescription(accounts.getDescription());
         return accountsService.saveObject(accounts_update);
     }
 
-    @PutMapping("/{user_id}/status")
+    @PutMapping("/{id}/update_status")
     public Accounts updateRiskStatus(@PathVariable Integer id, @RequestBody Accounts accounts) {
         Accounts accounts_update = accountsService.searchById(id);
         accounts_update.setStatus(accounts.getStatus());
         return accountsService.saveObject(accounts_update);
     }
 
-    @PutMapping("/{user_id}/password")
+    @PutMapping("/{id}/update_password")
     public Accounts updateRiskPassword(@PathVariable Integer id, @RequestBody Accounts accounts) {
         Accounts accounts_update = accountsService.searchById(id);
         accounts_update.setPassword_hash(accounts.getPassword_hash());
