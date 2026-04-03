@@ -28,9 +28,9 @@ public class AlertController {
         return alertService.searchAccountById(id);
     }
 
-    @GetMapping("/user/{user_id}")
-    public List<Alert> searchAccountByUser(@PathVariable Integer user_id){
-        return alertService.searchAccountsByUser(user_id);
+    @GetMapping("/user/{userId}")
+    public List<Alert> searchAccountsByUser(@PathVariable Integer userId){
+        return alertService.searchAccountsByUser(userId);
     }
 
     @GetMapping
@@ -39,8 +39,13 @@ public class AlertController {
     }
 
     @GetMapping("/{id}/exist")
-    public boolean existById(@PathVariable Integer id){
+    public boolean AccountexistById(@PathVariable Integer id){
         return alertService.existsByid(id);
+    }
+
+    @GetMapping("/user/{userId}/exist")
+    public boolean UserexistById(@PathVariable Integer userId){
+        return alertService.UserexistsByid(userId);
     }
 
     @DeleteMapping("/{id}")
@@ -48,9 +53,9 @@ public class AlertController {
         alertService.deleteByid(id);
     }
 
-    @DeleteMapping
-    public void deleteALL(){
-        alertService.deleteALL();
+    @DeleteMapping("/user/{userId}")
+    public void deleteAllUserAccounts(@PathVariable Integer userId){
+        alertService.deleteAllUserAccounts(userId);
     }
 
     @PutMapping("/{id}/update_account_email")

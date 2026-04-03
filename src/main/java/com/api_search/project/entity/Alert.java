@@ -13,7 +13,7 @@ public class Alert {
     private Integer id;
 
     @Column(name = "user_id")
-    private Integer user_id;
+    private Integer userId;
 
     @Column(name = "email")
     private String email;
@@ -28,12 +28,12 @@ public class Alert {
     private LocalDateTime date_alert;
 
     // getters and setters
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getId() {
