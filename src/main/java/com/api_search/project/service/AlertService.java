@@ -25,8 +25,12 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
-    public Alert searchById(Integer id){
+    public Alert searchAccountById(Integer id){
         return alertRepository.findById(id).orElse(null);
+    }
+
+    public List<Alert> searchAccountsByUser(Integer userId){
+        return alertRepository.findAll().stream().filter(alert -> alert.getUser_id().equals(userId)).toList();
     }
 
     public List<Alert> searchAll(){

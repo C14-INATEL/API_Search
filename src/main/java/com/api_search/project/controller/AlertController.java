@@ -24,8 +24,13 @@ public class AlertController {
     }
 
     @GetMapping("/{id}")
-    public Alert searchById(@PathVariable Integer id){
-        return alertService.searchById(id);
+    public Alert searchAccountById(@PathVariable Integer id){
+        return alertService.searchAccountById(id);
+    }
+
+    @GetMapping("/user/{user_id}")
+    public List<Alert> searchAccountByUser(@PathVariable Integer user_id){
+        return alertService.searchAccountsByUser(user_id);
     }
 
     @GetMapping
@@ -48,23 +53,23 @@ public class AlertController {
         alertService.deleteALL();
     }
 
-    @PutMapping("/{user_id}/update_email")
+    @PutMapping("/{id}/update_account_email")
     public Alert updateEmail(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
+        Alert alert_update = alertService.searchAccountById(id);
         alert_update.setEmail(alert.getEmail());
         return alertService.saveObject(alert_update);
     }
 
-    @PutMapping("/{user_id}/update_leak")
+    @PutMapping("/{id}/update_account_leak")
     public Alert updateLeak(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
+        Alert alert_update = alertService.searchAccountById(id);
         alert_update.setLeak(alert.getLeak());
         return alertService.saveObject(alert_update);
     }
 
-    @PutMapping("/{user_id}/update_risk_level")
+    @PutMapping("/{id}/update_account_risk_level")
     public Alert updateRiskLevel(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
+        Alert alert_update = alertService.searchAccountById(id);
         alert_update.setRisk_level(alert.getRisk_level());
         return alertService.saveObject(alert_update);
     }
