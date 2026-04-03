@@ -13,7 +13,6 @@ public class Leakeds_emailController{
     private Leakeds_emailService leakeds_emailService;
 
     // Constructor
-
     public Leakeds_emailController(Leakeds_emailService leakeds_emailService){
         this.leakeds_emailService = leakeds_emailService;
     }
