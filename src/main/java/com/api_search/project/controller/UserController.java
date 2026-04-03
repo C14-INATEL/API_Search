@@ -46,7 +46,7 @@ public class UserController {
         userService.deleteALL();
     }
 
-    @PutMapping("/{user_id}/updateNname")
+    @PutMapping("/{id}/update_name")
     public User updateName(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setName(user.getName());
