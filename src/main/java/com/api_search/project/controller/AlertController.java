@@ -1,5 +1,6 @@
 package com.api_search.project.controller;
 
+
 import com.api_search.project.entity.Alert;
 import com.api_search.project.entity.User;
 import com.api_search.project.service.AlertService;
@@ -24,8 +25,13 @@ public class AlertController {
     }
 
     @GetMapping("/{id}")
-    public Alert searchById(@PathVariable Integer id){
-        return alertService.searchById(id);
+    public Alert searchAccountById(@PathVariable Integer id){
+        return alertService.searchAccountById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Alert> searchAccountsByUser(@PathVariable Integer userId){
+        return alertService.searchAccountsByUser(userId);
     }
 
     @GetMapping
@@ -34,8 +40,13 @@ public class AlertController {
     }
 
     @GetMapping("/{id}/exist")
-    public boolean existById(@PathVariable Integer id){
+    public boolean AccountexistById(@PathVariable Integer id){
         return alertService.existsByid(id);
+    }
+
+    @GetMapping("/user/{userId}/exist")
+    public boolean UserexistById(@PathVariable Integer userId){
+        return alertService.UserexistsByid(userId);
     }
 
     @DeleteMapping("/{id}")
@@ -43,28 +54,28 @@ public class AlertController {
         alertService.deleteByid(id);
     }
 
-    @DeleteMapping
-    public void deleteALL(){
-        alertService.deleteALL();
+    @DeleteMapping("/user/{userId}")
+    public void deleteAllUserAccounts(@PathVariable Integer userId){
+        alertService.deleteAllUserAccounts(userId);
     }
 
-    @PutMapping("/{user_id}/update_email")
+    @PutMapping("/{id}/update_account_email")
     public Alert updateEmail(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
+        Alert alert_update = alertService.searchAccountById(id);
         alert_update.setEmail(alert.getEmail());
         return alertService.saveObject(alert_update);
     }
 
-    @PutMapping("/{user_id}/update_leak")
+    @PutMapping("/{id}/update_account_leak")
     public Alert updateLeak(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
+        Alert alert_update = alertService.searchAccountById(id);
         alert_update.setLeak(alert.getLeak());
         return alertService.saveObject(alert_update);
     }
 
-    @PutMapping("/{user_id}/risk_level")
+    @PutMapping("/{id}/update_account_risk_level")
     public Alert updateRiskLevel(@PathVariable Integer id, @RequestBody Alert alert) {
-        Alert alert_update = alertService.searchById(id);
+        Alert alert_update = alertService.searchAccountById(id);
         alert_update.setRisk_level(alert.getRisk_level());
         return alertService.saveObject(alert_update);
     }

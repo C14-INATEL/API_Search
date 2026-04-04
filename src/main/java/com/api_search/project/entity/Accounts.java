@@ -13,8 +13,8 @@ public class Accounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer account_ID;
+    @Column(name ="user_id")
+    private Integer userId;
 
     @Column(name = "email_monitored")
     private String address;
@@ -38,12 +38,12 @@ public class Accounts {
         this.id = id;
     }
 
-    public Integer getAccount_ID() {
-        return account_ID;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setAccount_ID(Integer account_ID) {
-        this.account_ID = account_ID;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getAddress() {

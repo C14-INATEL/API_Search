@@ -52,27 +52,27 @@ public class UserController {
         userService.deleteALL();
     }
 
-    @PutMapping("/{user_id}/update_name")
+    @PutMapping("/{id}/update_name")
     public User updateName(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setName(user.getName());
         return userService.saveObject(user_update);
     }
 
-    @PutMapping("/{user_id}/email")
+    @PutMapping("/{id}/update_email")
     public User updateEmail(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setEmail(user.getEmail());
         return userService.saveObject(user_update);
     }
-    @PutMapping("/{user_id}/update_passowrd")
+    @PutMapping("/{id}/update_password")
     public User updatePassword(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setPassword(user.getPassword());
         return userService.saveObject(user_update);
     }
 
-    @PutMapping("/{user_id}/update_token")
+    @PutMapping("/{id}/update_token")
     public User updateToken(@PathVariable Integer id, @RequestBody User user) {
         User user_update = userService.searchById(id);
         user_update.setToken(user.getToken());

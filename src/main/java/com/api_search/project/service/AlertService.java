@@ -4,6 +4,7 @@ import com.api_search.project.entity.Alert;
 import com.api_search.project.entity.User;
 import com.api_search.project.repository.AlertRepository;
 import com.api_search.project.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,12 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
-    public Alert searchById(Integer id){
+    public Alert searchAccountById(Integer id){
         return alertRepository.findById(id).orElse(null);
+    }
+
+    public List<Alert> searchAccountsByUser(Integer userId){
+        return alertRepository.findByUserId(userId);
     }
 
     public List<Alert> searchAll(){
@@ -37,8 +42,17 @@ public class AlertService {
         return alertRepository.existsById(id);
     }
 
+    public boolean UserexistsByid(Integer userId) {
+        return alertRepository.existsByUserId(userId);
+    }
+
     public void deleteByid(Integer id){
         alertRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAllUserAccounts(Integer userId){
+        alertRepository.deleteByUserId(userId);
     }
 
     public void deleteALL(){
