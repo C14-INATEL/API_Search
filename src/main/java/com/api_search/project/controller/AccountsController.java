@@ -43,8 +43,13 @@ public class AccountsController{
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id){
+    public void deleteaccountByID(@PathVariable Integer id){
         accountsService.deleteByid(id);
+    }
+
+    @DeleteMapping("user/{userId}")
+    public void deleteAllUserAccounts(@PathVariable Integer userId){
+        accountsService.deleteAllUserAccounts(userId);
     }
 
     @DeleteMapping

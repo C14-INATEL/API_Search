@@ -3,6 +3,7 @@ package com.api_search.project.service;
 import com.api_search.project.entity.Accounts;
 import com.api_search.project.entity.Alert;
 import com.api_search.project.repository.AccountsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,11 @@ public class AccountsService {
 
     public List<Accounts> searchAccountsByUser(Integer userId){
         return accountsRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public void deleteAllUserAccounts(Integer userId){
+        accountsRepository.deleteByUserId(userId);
     }
 
     public Accounts searchById(Integer id){

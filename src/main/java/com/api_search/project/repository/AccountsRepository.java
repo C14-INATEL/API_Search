@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface AccountsRepository extends JpaRepository<Accounts, Integer>{
     List<Accounts> findByUserId(Integer userId);
+
+    void deleteByUserId(Integer userId);
 }
