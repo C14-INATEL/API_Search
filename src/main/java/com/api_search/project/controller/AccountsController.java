@@ -32,6 +32,11 @@ public class AccountsController{
         return accountsService.searchAll();
     }
 
+    @GetMapping("/user/{userId}")
+    public List<Accounts> searchAccountsByUserId(@PathVariable Integer userId){
+        return accountsService.searchAccountsByUser(userId);
+    }
+
     @GetMapping("{id}/exist")
     public boolean existById(@PathVariable Integer id){
         return accountsService.existsByid(id);

@@ -24,6 +24,10 @@ public class AccountsService {
         return accountsRepository.save(accounts);
     }
 
+    public List<Accounts> searchAccountsByUser(Integer userId){
+        return accountsRepository.findByUserId(userId);
+    }
+
     public Accounts searchById(Integer id){
         return accountsRepository.findById(id).orElse(null);
     }
