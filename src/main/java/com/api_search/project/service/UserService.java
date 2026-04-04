@@ -2,6 +2,7 @@ package com.api_search.project.service;
 
 import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,24 @@ public class UserService {
     }
 
     public void save(User user){
+        String password;
+        String hash;
+
+        password = user.getPassword();
+        hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hash);
+
         userRepository.save(user);
     }
 
     public User saveObject(User user) {
+        String password;
+        String hash;
+
+        password = user.getPassword();
+        hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hash);
+
         return userRepository.save(user);
     }
 
