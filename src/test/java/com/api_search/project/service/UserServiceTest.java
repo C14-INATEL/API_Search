@@ -1,6 +1,7 @@
 // AAA (Arrange, Act, Assert) ## Very important to build test
 package com.api_search.project.service;
 
+import com.api_search.project.dto.UserDashboardDTO;
 import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -37,13 +39,13 @@ class UserServiceTest {
         user.setPassword("test of unit password");
         user.setToken("LP1234");
 
-        Mockito.when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
 
         // Execution (Act)
         userService.save(user);
 
         // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).save(user);
+        verify(userRepository, Mockito.times(1)).save(user);
     }
 
     @Test
@@ -56,7 +58,7 @@ class UserServiceTest {
         user.setPassword("test of unit password");
         user.setToken("LP1234");
 
-        Mockito.when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
 
         // Execution (Act)
         User savedUser = userService.saveObject(user);
@@ -68,7 +70,7 @@ class UserServiceTest {
         assertEquals("test of unit password", savedUser.getPassword());
         assertEquals("LP1234", savedUser.getToken());
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(user);
+        verify(userRepository, Mockito.times(1)).save(user);
 
     }
 
@@ -81,7 +83,7 @@ class UserServiceTest {
         user.setId(id);
         user.setName("Luan");
 
-        Mockito.when(userRepository.findById(id)).thenReturn(java.util.Optional.of(user));
+        when(userRepository.findById(id)).thenReturn(java.util.Optional.of(user));
 
         // Execution (Act)
         User userSearched = userService.searchById(id);
@@ -103,7 +105,7 @@ class UserServiceTest {
         fakeList.add(user1);
         fakeList.add(user2);
 
-        Mockito.when(userRepository.findAll()).thenReturn(fakeList);
+        when(userRepository.findAll()).thenReturn(fakeList);
 
         // Execution (Act)
         List<User> result_fakeList = userService.searchAll();
@@ -122,7 +124,7 @@ class UserServiceTest {
         // Arrange
         Integer id = 19;
 
-        Mockito.when(userRepository.findById(id)).thenReturn(java.util.Optional.empty());
+        when(userRepository.findById(id)).thenReturn(java.util.Optional.empty());
 
         // Execution (Act)
         User userSearched = userService.searchById(id);
@@ -141,7 +143,7 @@ class UserServiceTest {
         userService.deleteByid(id);
 
         // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).deleteById(id);
+        verify(userRepository, Mockito.times(1)).deleteById(id);
     }
 
     @Test
@@ -150,6 +152,24 @@ class UserServiceTest {
         // Execution (Act)
         userService.deleteALL();
         // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).deleteAll();
+        verify(userRepository, Mockito.times(1)).deleteAll();
+    }
+
+    @Test
+    void shouldFetchUserDashboard() {
+        // Arrange
+        UserDashboardDTO dto = mock(UserDashboardDTO.class);
+        when(dto.getUsuario()).thenReturn("João");
+
+        when(userRepository.buscarDashboard(20))
+                .thenReturn(List.of(dto));
+
+        // Act
+        List<UserDashboardDTO> result = userService.getDashboard(20);
+
+        // Assert
+        assertFalse(result.isEmpty());
+        assertEquals("João", result.get(0).getUsuario());
+        verify(userRepository).buscarDashboard(20);
     }
 }
