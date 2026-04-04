@@ -1,5 +1,6 @@
 package com.api_search.project.controller;
 
+import com.api_search.project.dto.UserDashboardDTO;
 import com.api_search.project.entity.Alert;
 import com.api_search.project.entity.User;
 import com.api_search.project.service.UserService;
@@ -24,6 +25,11 @@ public class UserController {
     @GetMapping("/{id}")
     public User searchById(@PathVariable Integer id){
         return userService.searchById(id);
+    }
+
+    @GetMapping("/{id}/dashboard")
+    public List<UserDashboardDTO> dashboard(@PathVariable Integer id) {
+        return userService.getDashboard(id);
     }
 
     @GetMapping
