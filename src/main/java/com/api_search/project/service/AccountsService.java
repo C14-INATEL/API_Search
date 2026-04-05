@@ -4,6 +4,7 @@ import com.api_search.project.entity.Accounts;
 import com.api_search.project.entity.Alert;
 import com.api_search.project.repository.AccountsRepository;
 import jakarta.transaction.Transactional;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,22 @@ public class AccountsService {
     }
 
     public void save(Accounts accounts){
+        String password;
+        String hash;
+
+        password = accounts.getPassword_hash();
+        hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        accounts.setPassword_hash(hash);
         accountsRepository.save(accounts);
     }
 
     public Accounts saveObject(Accounts accounts) {
+        String password;
+        String hash;
+
+        password = accounts.getPassword_hash();
+        hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        accounts.setPassword_hash(hash);
         return accountsRepository.save(accounts);
     }
 

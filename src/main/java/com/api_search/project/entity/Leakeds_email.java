@@ -22,6 +22,9 @@ public class Leakeds_email {
         this.email_id = email_id;
     }
 
+    public Leakeds_email() {
+    }
+
     // Getters and Setters
     public Integer getId() {
         return id;

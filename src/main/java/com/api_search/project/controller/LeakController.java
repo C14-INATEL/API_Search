@@ -14,19 +14,23 @@ public class LeakController {
     private LeakService leakService;
 
     //constructor
+    public LeakController(LeakService leakService) {
+        this.leakService = leakService;
+    }
+    @GetMapping
+    public List<Leak> search(){
+        return leakService.searchAll();
+    }
+
     @PostMapping
     public void save(@RequestBody Leak leak){
+        leakService.searchAndSave(leak.getAccountMonitored());
         leakService.save(leak);
     }
 
     @GetMapping("/{id}")
     public Leak searchById(@PathVariable Integer id){
         return leakService.searchById(id);
-    }
-
-    @GetMapping
-    public List<Leak> search(){
-        return leakService.searchAll();
     }
 
     @GetMapping("/{id}/exist")
@@ -47,7 +51,7 @@ public class LeakController {
     @PutMapping("/{user_id}/update_accountMonitored")
     public Leak updateAccounMonitored(@PathVariable Integer id, @RequestBody Leak leak) {
         Leak leak_update = leakService.searchById(id);
-        leak_update.setAccount_monitored(leak_update.getAccount_monitored());
+        leak_update.setAccountMonitored(leak_update.getAccountMonitored());
         return leakService.saveObject(leak_update);
     }
 
