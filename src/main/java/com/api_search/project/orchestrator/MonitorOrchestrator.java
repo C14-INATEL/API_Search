@@ -33,7 +33,7 @@ public class MonitorOrchestrator {
         User user = userService.searchById(userId);
 
         Accounts account = new Accounts();
-        account.setAccount_ID(userId);
+        account.setUserId(userId);
         account.setAddress(email);
         account.setDescription(account_monitored);
         account.setPassword_hash(password_hash);
@@ -48,7 +48,7 @@ public class MonitorOrchestrator {
         alert.setEmail(email);
         alert.setRisk_level("SAFE");
         alert.setDate_alert(LocalDateTime.now());
-        alert.setUser_id(userId);
+        alert.setUserId(userId);
 
         alertService.save(alert);
     }
