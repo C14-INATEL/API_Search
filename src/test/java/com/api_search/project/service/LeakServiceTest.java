@@ -32,7 +32,7 @@ class LeakServiceTest {
     @DisplayName("Should save Leak on database")
     void shouldSave() {
         Leak leak = new Leak();
-        leak.setAccount_monitored("luanCalabresa@gmail.com");
+        leak.setAccountMonitored("luanCalabresa@gmail.com");
         leak.setRegister(new BigInteger("123456789012345678901234567890"));
 
         when(leakRepository.save(leak)).thenReturn(leak);
@@ -47,7 +47,7 @@ class LeakServiceTest {
     @DisplayName("Should save leak object")
     void shouldSaveObject() {
         Leak leak = new Leak();
-        leak.setAccount_monitored("luanCalabresa@gmail.com");
+        leak.setAccountMonitored("luanCalabresa@gmail.com");
         leak.setRegister(new BigInteger("123456789012345678901234567890"));
 
         when(leakRepository.save(leak)).thenReturn(leak);
@@ -56,7 +56,7 @@ class LeakServiceTest {
         Leak savedLeak = leakService.saveObject(leak);
 
         assertNotNull(savedLeak);
-        assertEquals("luanCalabresa@gmail.com", savedLeak.getAccount_monitored());
+        assertEquals("luanCalabresa@gmail.com", savedLeak.getAccountMonitored());
         assertEquals(new BigInteger("123456789012345678901234567890"), savedLeak.getRegister());
 
         verify(leakRepository, Mockito.times(1)).save(leak);
@@ -68,7 +68,7 @@ class LeakServiceTest {
         Integer id = 1;
         Leak leak = new Leak();
         leak.setId(id);
-        leak.setAccount_monitored("igortoledo@gmail.com");
+        leak.setAccountMonitored("igortoledo@gmail.com");
 
         when(leakRepository.findById(id)).thenReturn(java.util.Optional.of(leak));
 
@@ -77,7 +77,7 @@ class LeakServiceTest {
 
         //Assert
         assertNotNull(leakSearched);
-        assertEquals("igortoledo@gmail.com", leakSearched.getAccount_monitored());
+        assertEquals("igortoledo@gmail.com", leakSearched.getAccountMonitored());
     }
 
     @Test
@@ -85,8 +85,8 @@ class LeakServiceTest {
     void shouldSearchAll() {
         Leak Leak1 = new Leak();
         Leak Leak2 = new Leak();
-        Leak1.setAccount_monitored("igortoledo@gmail.com");
-        Leak2.setAccount_monitored("LuanCalabresa.com");
+        Leak1.setAccountMonitored("igortoledo@gmail.com");
+        Leak2.setAccountMonitored("LuanCalabresa.com");
 
         List<Leak> fakeList = new ArrayList<>();
         fakeList.add(Leak1);
@@ -99,8 +99,8 @@ class LeakServiceTest {
 
         assertNotNull(result_fakeList);
         assertEquals(2, result_fakeList.size());
-        assertEquals("igortoledo@gmail.com", result_fakeList.get(0).getAccount_monitored());
-        assertEquals("LuanCalabresa.com", result_fakeList.get(1).getAccount_monitored());
+        assertEquals("igortoledo@gmail.com", result_fakeList.get(0).getAccountMonitored());
+        assertEquals("LuanCalabresa.com", result_fakeList.get(1).getAccountMonitored());
     }
 
     @Test
