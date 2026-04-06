@@ -25,6 +25,7 @@ public class AccountsService {
         password = accounts.getPassword_hash();
         hash = BCrypt.hashpw(password, BCrypt.gensalt());
         accounts.setPassword_hash(hash);
+
         accountsRepository.save(accounts);
     }
 
@@ -35,6 +36,7 @@ public class AccountsService {
         password = accounts.getPassword_hash();
         hash = BCrypt.hashpw(password, BCrypt.gensalt());
         accounts.setPassword_hash(hash);
+
         return accountsRepository.save(accounts);
     }
 
