@@ -76,6 +76,7 @@ jobs:
             
             🧪 Build: ${{ needs.build.result }}
             🚀 Deploy: ${{ needs.deploy.result }}
+            🚨 Notify: ${{ needs.deploy.result }}
             
             📦 Repo: ${{ github.repository }}
             🌿 Branch: ${{ github.ref }}
