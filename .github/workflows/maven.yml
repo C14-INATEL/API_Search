@@ -68,7 +68,7 @@ jobs:
             
             📦 Repo: ${{ github.repository }}
             🌿 Branch: ${{ github.ref }}
-            👤 Group C-14 Activity: ${{ github.actor }}
+            👤 Group C-14 Activity: Luan e Igor
             
             🔗 Link: https://github.com/${{ github.repository }}/actions
           to: ${{ secrets.EMAIL_TO }}
