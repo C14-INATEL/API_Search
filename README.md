@@ -153,7 +153,7 @@ O sistema calcula uma pontuação de segurança do usuário.
 
 **Exemplo:**
 
-```
+```			
 Security Score: 75/100
 ```
 
@@ -188,5 +188,368 @@ Security Score: 75/100
 ## ⚠️ Observações Importantes
 
 * Este sistema lida com **dados sensíveis**, portanto segurança deve ser prioridade.
-* Nunca exponha chaves de API publicamente.
-* Recomenda-se uso de variáveis de ambiente (.env).
+
+---
+
+## ⚠️ Como Testar a aplicação ⚠️
+
+A aplicação consta em Desenvolvimento, Portanto é necessário conter os seguintes requisitos para realisar os testes.
+
+1 . Ter instalado o Postman para utilizar os métodos
+
+---
+USER
+---
+
+## Listar Usuarios Salvos
+
+```
+GET http://localhost:8080/users
+```
+
+## Salvar Novos Usuarios
+
+```
+POST http://localhost:8080/users
+```
+
+#### exemplo CopyPaste
+
+{
+"name": "Christopher",
+"email": "chrislima@gmail.com",
+"password": "viciadoEmClaudeIA"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/users
+```
+
+## Pesquisar Usuario Por ID
+
+Troque {id} por algum id existente:
+
+ ids = { 22, 23, 24 }
+
+```
+GET http://localhost:8080/users/{id}
+```
+
+## Verificar se um Usuario existe pelo ID
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+GET http://localhost:8080/users/{id}/exist
+```
+
+## Atualizar nome de uma Conta
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+PUT http://localhost:8080/users/{id}/update_name
+```
+#### exemplo CopyPaste
+
+{
+    "name": "Marcelo"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/users
+```
+
+## Atualizar email de uma Conta
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+PUT http://localhost:8080/users/{id}/update_email
+```
+
+#### exemplo CopyPaste
+
+{
+"email": "marcelinhoCG160@gmail.com"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/users
+```
+## Atualizar Password de uma Conta
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+PUT http://localhost:8080/users/{id}/update_password
+```
+
+#### exemplo CopyPaste
+
+{
+"password": "Malandro123"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/users
+```
+## Atualizar Token de uma Conta
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+PUT http://localhost:8080/users/{id}/update_token
+```
+
+#### exemplo CopyPaste
+
+{
+"token": "osnj35bk3b56kj46bk#5kj"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/users
+```
+
+## Deletar um Usuario por id
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+DELETE http://localhost:8080/users/{id}
+```
+
+Verificar Atualização:
+```
+GET http://localhost:8080/users
+```
+
+---
+Accounts
+---
+
+## Listar Accounts Salvos
+
+```
+GET http://localhost:8080/users
+```
+## Listar Contas de um Usuario pelo ID
+
+Troque {id} por algum id existente:
+
+ids = { 22, 23, 24 }
+
+```
+GET http://localhost:8080/users/{id}
+```
+
+## Pesquisar Conta por ID
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+## Verificar se Conta existe pelo ID
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+GET http://localhost:8080/accounts/{id}/exist
+```
+
+## Atualizar email de uma conta
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+PUT http://localhost:8080/accounts/{id}/update_adress
+```
+
+#### exemplo CopyPaste
+
+{
+"address": "PaulinhoCapa@gmail.com"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+
+## Atualizar Status de uma conta
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+PUT http://localhost:8080/accounts/{id}/update_status
+```
+
+#### exemplo CopyPaste
+
+{
+"status" = "LOW"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+
+## Atualizar Password de uma conta
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+PUT http://localhost:8080/accounts/{id}/update_password
+```
+
+#### exemplo CopyPaste
+
+{
+"password_hash": "Karl Marx"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+
+## Atualizar Descrição de uma conta
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+PUT http://localhost:8080/accounts/{id}/update_description
+```
+
+#### exemplo CopyPaste
+
+{
+"description": "Instagram.com"
+}
+
+Verificar Atualização:
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+
+## Deletar contas Por id
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+DELETE http://localhost:8080/accounts/{id}
+```
+Verificar Atualização:
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+## Deletar todas as contas de um Usuario
+
+Troque {id} por algum id existente:
+
+USERS:
+- 22 - ID conta: 30
+- 23 - ID conta: 31, 32
+- 24 - ID conta: 33
+
+```
+DELETE http://localhost:8080/accounts/user/{id}
+```
+
+Verificar Atualização:
+```
+GET http://localhost:8080/accounts/{id}
+```
+
+---
+Alert
+---
+
+Só sera possivel visualizar alertas de emails vazados, se o seu email ja foi vazado na API Leak.
+
+Estamos utilizando somente essa API no momento pois, ela tem um plano free mais versatil, podendo realizar várias requisições,
+ademais será adicionado mais API's para uma melhor qualidade do Software
+
+No momento você pode verificar o funcionamento da verificação de vazamento, utilizando um email que foi vazado no API Leak. Para testar Faça:
+
+Veja que não existe nenhum email vazado:
+
+```
+GET http://localhost:8080/alert
+```
+
+Crie uma conta onde ela tenha o email abaixo:
+
+Email Vazado: test@gmail.com
+
+Pronto, quando a conta for criada, a API irá verificar se esse email consta no banco de dados de vazamento deles, com o retorno da api o sistema 
+API Search irá criar um alerta para indicar que essa conta foi vazada.
+
+Verificar Atualização:
+```
+GET http://localhost:8080/alert
+```
+
+
+
