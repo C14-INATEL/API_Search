@@ -68,7 +68,7 @@ jobs:
             
             📦 Repo: ${{ github.repository }}
             🌿 Branch: ${{ github.ref }}
-            👤 Autor: ${{ github.actor }}
+            👤 Group C-14 Activity: ${{ github.actor }}
             
             🔗 Link: https://github.com/${{ github.repository }}/actions
           to: ${{ secrets.EMAIL_TO }}
