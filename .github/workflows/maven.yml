@@ -30,14 +30,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+
+      - name: Run script file
+        run: ./script.sh
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
       - name: Give permission
         run: chmod +x script.sh
-
-      - name: Run script file
-        run: ./script.sh
 
   deploy:
     runs-on: ubuntu-latest
