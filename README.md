@@ -191,6 +191,21 @@ Security Score: 75/100
 
 ---
 
+##  Participação da IA
+
+IA usada:  CHAT GPT
+
+PROMTP: 
+
+![prompt](https://github.com/user-attachments/assets/86c1d686-52b8-4e48-b1e5-03bdf9456e77)
+
+RESULT: 
+
+![result](https://github.com/user-attachments/assets/a81e07ff-317f-486a-8e28-a86110053aec)
+
+Foi Satisfatorio: Sim, foi utilizado para a construção do envio de notificações.
+
+
 ## ⚠️ Como Testar a aplicação ⚠️
 
 A aplicação consta em Desenvolvimento, Portanto é necessário conter os seguintes requisitos para realisar os testes.
@@ -224,7 +239,9 @@ POST http://localhost:8080/users
 Verificar Atualização:
 ```
 GET http://localhost:8080/users
-```
+```## Parte utilizada na IA
+
+
 
 ## Pesquisar Usuario Por ID
 
@@ -332,6 +349,8 @@ GET http://localhost:8080/users
 Troque {id} por algum id existente:
 
 ids = { 22, 23, 24 }
+## Parte utilizada na IA
+
 
 ```
 DELETE http://localhost:8080/users/{id}
