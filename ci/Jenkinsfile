@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+
+    tools {
+        maven "M3"
+    }
+
+    environment {
+        APP_NAME = "api-search"
+        VERSION = "1.0.${BUILD_NUMBER}"
+
+        DB_URL = credentials('DB_URL')
+        DB_USER = credentials('DB_USER')
+        DB_PASS = credentials('USER_PASSWORD')
+    }
+
+    stages {
+
+        stage('Checkout'){
+            steps {
+                git branch: 'main', url: 'https://github.com/C14-INATEL/API_Search.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh "mvn clean package -DskipTests"
+            }
+        }
+
+        stage('Test'){
+    steps{
+        withCredentials([
+            string(credentialsId: 'DB_URL', variable: 'DB_URL'),
+            string(credentialsId: 'DB_USER', variable: 'DB_USER'),
+            string(credentialsId: 'USER_PASSWORD', variable: 'DB_PASS')
+        ]) {
+            sh '''
+            mvn test \
+            -Dspring.datasource.url=$DB_URL \
+            -Dspring.datasource.username=$DB_USER \
+            -Dspring.datasource.password=$DB_PASS
+            '''
+        }
+    }
+}
+
+        stage('Package Version'){
+            steps {
+                sh "mv target/*.jar target/${APP_NAME}-${VERSION}.jar"
+            }
+        }
+
+        stage('Deploy Staging'){
+            when {
+                branch 'staging'
+            }
+            steps {
+                sh """
+                echo "Deploy in staging"
+                mkdir -p staging
+                cp target/${APP_NAME}-${VERSION}.jar staging/
+                """
+            }
+        }
+
+        stage('Deploy Production'){
+            when {
+                branch 'main'
+            }
+            steps {
+                sh """
+                echo "Deploy em produção"
+                mkdir -p prod
+                cp target/${APP_NAME}-${VERSION}.jar prod/
+                """
+            }
+        }
+    }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/TEST-*.xml'
+            archiveArtifacts 'target/*.jar'
+        }
+    }
+}

@@ -47,7 +47,7 @@ public class UserService {
         return userRepository.buscarDashboard(userId);
     }
 
-    public List<User> searchAll(){        // Execution (Act)
+    public List<User> searchAll(){
 
         return userRepository.findAll();
     }
