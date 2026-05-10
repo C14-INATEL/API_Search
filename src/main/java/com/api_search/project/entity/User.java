@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class User {
     @Column(name = "date_to_in")
     private LocalDateTime date;
 
-    @Column(name = "data_update_sign")
+    @Column(name = "date_update_sign")
     private LocalDateTime date_update;
 
     // getters and setters
