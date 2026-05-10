@@ -79,6 +79,48 @@ pipeline {
     }
 
     post {
+        success {
+            emailext(
+                subject: "🚀 Pipeline Finalizado - ${JOB_NAME} #${BUILD_NUMBER}",
+                body: """
+                🚀 Pipeline finalizado!
+
+                🧪 Build: SUCESSO
+                🚀 Deploy: SUCESSO
+                🚨 Notify: ENVIADO
+
+                📦 Projeto: ${JOB_NAME}
+                🌿 Branch: ${BRANCH_NAME}
+                👤 Group C-14 Activity: Luan e Igor
+
+                🔢 Build Number: ${BUILD_NUMBER}
+                🖥️ Jenkins: ${JENKINS_URL}
+
+                🔗 Build URL:
+                ${BUILD_URL}
+                """,
+                to: "seuemail@gmail.com"
+        )
+        }
+
+        failure {
+            emailext(
+                subject: "❌ Pipeline Falhou - ${JOB_NAME} #${BUILD_NUMBER}",
+                body: """
+                ❌ Pipeline falhou!
+
+                📦 Projeto: ${JOB_NAME}
+                🌿 Branch: ${BRANCH_NAME}
+
+                🔢 Build Number: ${BUILD_NUMBER}
+
+                🔗 Verifique:
+                ${BUILD_URL}
+                """,
+                to: "seuemail@gmail.com"
+            )
+        }
+
         always {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
