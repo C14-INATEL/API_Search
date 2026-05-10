@@ -79,7 +79,7 @@ pipeline {
     }
 
     post {
-        success {
+        always {
             emailext(
                 subject: "🚀 Done Pipeline - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
