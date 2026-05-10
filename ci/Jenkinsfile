@@ -83,15 +83,15 @@ pipeline {
             emailext(
                 subject: "🚀 Pipeline Finalizado - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
-                🚀 Pipeline finalizado!
+                🚀 Done Pipeline!
 
-                🧪 Build: SUCESSO
-                🚀 Deploy: SUCESSO
-                🚨 Notify: ENVIADO
+                🧪 Build: SUCCESS
+                🚀 Deploy: SUCCESS
+                🚨 Notify: SENT
 
-                📦 Projeto: ${JOB_NAME}
+                📦 Project: ${JOB_NAME}
                 🌿 Branch: ${BRANCH_NAME}
-                👤 Group C-14 Activity: Luan e Igor
+                👤 ILSolutions
 
                 🔢 Build Number: ${BUILD_NUMBER}
                 🖥️ Jenkins: ${JENKINS_URL}
@@ -99,7 +99,7 @@ pipeline {
                 🔗 Build URL:
                 ${BUILD_URL}
                 """,
-                to: "seuemail@gmail.com"
+                to: "igor.luan.solutions@gmail.com"
         )
         }
 
@@ -107,17 +107,17 @@ pipeline {
             emailext(
                 subject: "❌ Pipeline Falhou - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
-                ❌ Pipeline falhou!
+                ❌ Failed Pipeline!
 
-                📦 Projeto: ${JOB_NAME}
+                📦 Project: ${JOB_NAME}
                 🌿 Branch: ${BRANCH_NAME}
 
                 🔢 Build Number: ${BUILD_NUMBER}
 
-                🔗 Verifique:
+                🔗 Check:
                 ${BUILD_URL}
                 """,
-                to: "seuemail@gmail.com"
+                to: "igor.luan.solutions@gmail.com"
             )
         }
 
