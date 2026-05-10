@@ -18,7 +18,7 @@ pipeline {
 
         stage('Checkout'){
             steps {
-                git branch: 'main', url: 'https://github.com/C14-INATEL/API_Search.git'
+                checkout scm
             }
         }
 
@@ -70,7 +70,7 @@ pipeline {
             }
             steps {
                 sh """
-                echo "Deploy em produção"
+                echo "Deploy in production"
                 mkdir -p prod
                 cp target/${APP_NAME}-${VERSION}.jar prod/
                 """
@@ -81,7 +81,7 @@ pipeline {
     post {
         success {
             emailext(
-                subject: "🚀 Pipeline Finalizado - ${JOB_NAME} #${BUILD_NUMBER}",
+                subject: "🚀 Done Pipeline - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
                 🚀 Done Pipeline!
 
@@ -100,12 +100,12 @@ pipeline {
                 ${BUILD_URL}
                 """,
                 to: "igor.luan.solutions@gmail.com"
-        )
+            )
         }
 
         failure {
             emailext(
-                subject: "❌ Pipeline Falhou - ${JOB_NAME} #${BUILD_NUMBER}",
+                subject: "❌ Failed Pipeline! - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
                 ❌ Failed Pipeline!
 
