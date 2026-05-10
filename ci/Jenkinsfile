@@ -79,7 +79,7 @@ pipeline {
     }
 
     post {
-        always {
+        success {
             emailext(
                 subject: "🚀 Done Pipeline - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
@@ -90,7 +90,7 @@ pipeline {
                 🚨 Notify: SENT
 
                 📦 Project: ${JOB_NAME}
-                🌿 Branch: ${BRANCH_NAME}
+                🌿 Branch: ${env.GIT_BRANCH}
                 👤 ILSolutions
 
                 🔢 Build Number: ${BUILD_NUMBER}
@@ -110,7 +110,7 @@ pipeline {
                 ❌ Failed Pipeline!
 
                 📦 Project: ${JOB_NAME}
-                🌿 Branch: ${BRANCH_NAME}
+                🌿 Branch: ${env.GIT_BRANCH}
 
                 🔢 Build Number: ${BUILD_NUMBER}
 
