@@ -99,7 +99,7 @@ pipeline {
                 🔗 Build URL:
                 ${BUILD_URL}
                 """,
-                to: "igor.luan.solutions@gmail.com, lu4n.engs0ft@gmail.com"
+                to: "igor.luan.solutions@gmail.com"
             )
         }
 
@@ -117,7 +117,7 @@ pipeline {
                 🔗 Check:
                 ${BUILD_URL}
                 """,
-                to: "igor.luan.solutions@gmail.com, lu4n.engs0ft@gmail.com"
+                to: "igor.luan.solutions@gmail.com"
             )
         }
 
