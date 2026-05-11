@@ -112,7 +112,7 @@ pipeline {
                 📦 Project: ${JOB_NAME}
                 🌿 Branch: ${env.GIT_BRANCH}
 
-                🔢 Buildaaaa Number: ${BUILD_NUMBER}
+                🔢 Build Number: ${BUILD_NUMBER}
 
                 🔗 Check:
                 ${BUILD_URL}
