@@ -94,7 +94,7 @@ pipeline {
                 🚨 Notify: SENT
 
                 📦 Project: ${JOB_NAME}
-                🌿 Branch: ${env.GIT_BRANCH}
+                🌿 Branch: [${env.GIT_BRANCH}]
                 👤 ILSolutions
 
                 🔢 Build Number: ${BUILD_NUMBER}
@@ -114,7 +114,7 @@ pipeline {
                 ❌ Failed Pipeline!
 
                 📦 Project: ${JOB_NAME}
-                🌿 Branch: ${env.GIT_BRANCH}
+                🌿 Branch: [${env.GIT_BRANCH}]
 
                 🔢 Build Number: ${BUILD_NUMBER}
 
