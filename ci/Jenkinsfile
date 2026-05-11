@@ -53,7 +53,9 @@ pipeline {
 
         stage('Deploy Staging'){
             when {
-                env.GIT_BRANCH == 'origin/staging'
+                expression {
+                    env.GIT_BRANCH == 'origin/staging'
+                }
             }
             steps {
                 sh """
@@ -66,7 +68,9 @@ pipeline {
 
         stage('Deploy Production'){
             when {
-                env.GIT_BRANCH == 'origin/main'
+                expression {
+                    env.GIT_BRANCH == 'origin/main'
+                }
             }
             steps {
                 sh """
