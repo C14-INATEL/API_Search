@@ -91,7 +91,7 @@ pipeline {
 
                 🧪 Build: SUCCESS
                 🚀 Deploy: SUCCESS
-                🚨 Notify: SEN
+                🚨 Notify: SENT
 
                 📦 Project: ${JOB_NAME}
                 🌿 Branch: [${env.GIT_BRANCH}]
