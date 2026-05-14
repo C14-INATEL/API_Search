@@ -111,7 +111,7 @@ pipeline {
             emailext(
                 subject: "❌ Failed Pipeline! - ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
-                ❌ Failed Pipeline !
+                ❌ Failed Pipeline!
 
                 📦 Project: ${JOB_NAME}
                 🌿 Branch: [${env.GIT_BRANCH}]
