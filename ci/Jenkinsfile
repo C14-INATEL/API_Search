@@ -36,8 +36,8 @@ pipeline {
         withCredentials([
             string(credentialsId: 'DB_URL', variable: 'DB_URL'),
             string(credentialsId: 'DB_USER', variable: 'DB_USER'),
-            string(credentialsId: 'USER_PASSWORD', variable: 'DB_PASSWORD')
-            string(credentialsId: 'URL_BASE_FIND_BY_EMAIL_HIBP', variable: 'URL_BASE_FIND_BY_EMAIL_HIBP')
+            string(credentialsId: 'USER_PASSWORD', variable: 'DB_PASSWORD'),
+            string(credentialsId: 'URL_BASE_FIND_BY_EMAIL_HIBP', variable: 'URL_BASE_FIND_BY_EMAIL_HIBP'),
             string(credentialsId: 'HIBP_API_KEY', variable: 'HIBP_API_KEY')
         ]) {
             sh '''
