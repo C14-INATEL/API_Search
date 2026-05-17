@@ -93,7 +93,7 @@ pipeline {
         success {
             emailext(
                 subject: "🚀 Done Pipeline - ${JOB_NAME} #${BUILD_NUMBER}",
-                mineType: "text/html",
+                mimeType: "text/html",
                 body: """
                 🚀 Done Pipeline!
 
