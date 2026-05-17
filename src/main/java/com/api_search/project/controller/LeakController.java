@@ -24,7 +24,6 @@ public class LeakController {
 
     @PostMapping
     public void save(@RequestBody Leak leak){
-        leakService.searchAndSave(leak.getAccountMonitored());
         leakService.save(leak);
     }
 
