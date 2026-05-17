@@ -11,7 +11,10 @@ pipeline {
 
         DB_URL = credentials('DB_URL')
         DB_USER = credentials('DB_USER')
-        DB_PASS = credentials('USER_PASSWORD')
+        DB_PASSWORD = credentials('USER_PASSWORD')
+
+        URL_BASE_FIND_BY_EMAIL_HIBP = credentials('URL_BASE_FIND_BY_EMAIL_HIBP ')
+        HIBP_API_KEY = credentials('HIBP_API_KEY')
     }
 
     stages {
@@ -33,13 +36,17 @@ pipeline {
         withCredentials([
             string(credentialsId: 'DB_URL', variable: 'DB_URL'),
             string(credentialsId: 'DB_USER', variable: 'DB_USER'),
-            string(credentialsId: 'USER_PASSWORD', variable: 'DB_PASS')
+            string(credentialsId: 'USER_PASSWORD', variable: 'DB_PASSWORD')
+            string(credentialsId: 'URL_BASE_FIND_BY_EMAIL_HIBP', variable: 'URL_BASE_FIND_BY_EMAIL_HIBP')
+            string(credentialsId: 'HIBP_API_KEY', variable: 'HIBP_API_KEY')
         ]) {
             sh '''
             mvn test \
             -Dspring.datasource.url=$DB_URL \
             -Dspring.datasource.username=$DB_USER \
-            -Dspring.datasource.password=$DB_PASS
+            -Dspring.datasource.password=$DB_PASS \
+            -Dhibp.base-url=$URL_BASE_FIND_BY_EMAIL_HIBP \
+            -Dhibp.api-key=$HIBP_API_KEY
             '''
         }
     }
