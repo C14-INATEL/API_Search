@@ -93,6 +93,7 @@ pipeline {
         success {
             emailext(
                 subject: "🚀 Done Pipeline - ${JOB_NAME} #${BUILD_NUMBER}",
+                mineType: "text/html",
                 body: """
                 🚀 Done Pipeline!
 
@@ -112,7 +113,8 @@ pipeline {
 
                 <br><br>
 
-                <img src="/home/luankali/workspace/learning/inatel/c14/project/img/Pass.png">
+                <img src="https://raw.githubusercontent.com/C14-INATEL/API_Search/51e4952f1d40f6d4a4f330c503d8d1ccf2dd7492/img/Pass.png"
+                     width="400">
                 """,
                 to: "igor.luan.solutions@gmail.com"
             )
