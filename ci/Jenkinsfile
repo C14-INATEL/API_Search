@@ -109,6 +109,10 @@ pipeline {
 
                 🔗 Build URL:
                 ${BUILD_URL}
+
+                <br><br>
+
+                <img src="/home/luankali/workspace/learning/inatel/c14/project/img/Pass.png">
                 """,
                 to: "igor.luan.solutions@gmail.com"
             )
