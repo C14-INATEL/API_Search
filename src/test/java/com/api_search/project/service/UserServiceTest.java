@@ -1,7 +1,6 @@
 // AAA (Arrange, Act, Assert) ## Very important to build test
 package com.api_search.project.service;
 
-import com.api_search.project.dto.UserDashboardDTO;
 import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
 import org.junit.jupiter.api.Disabled;
@@ -157,21 +156,4 @@ class UserServiceTest {
         verify(userRepository, Mockito.times(1)).deleteAll();
     }
 
-    @Test
-    void shouldFetchUserDashboard() {
-        // Arrange
-        UserDashboardDTO dto = mock(UserDashboardDTO.class);
-        when(dto.getUsuario()).thenReturn("João");
-
-        when(userRepository.buscarDashboard(20))
-                .thenReturn(List.of(dto));
-
-        // Act
-        List<UserDashboardDTO> result = userService.getDashboard(20);
-
-        // Assert
-        assertFalse(result.isEmpty());
-        assertEquals("João", result.get(0).getUsuario());
-        verify(userRepository).buscarDashboard(20);
-    }
 }

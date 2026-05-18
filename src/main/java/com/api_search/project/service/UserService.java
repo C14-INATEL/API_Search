@@ -1,6 +1,5 @@
 package com.api_search.project.service;
 
-import com.api_search.project.dto.UserDashboardDTO;
 import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -41,10 +40,6 @@ public class UserService {
 
     public User searchById(Integer id){
         return userRepository.findById(id).orElse(null);
-    }
-
-    public List<UserDashboardDTO> getDashboard(Integer userId) {
-        return userRepository.buscarDashboard(userId);
     }
 
     public List<User> searchAll(){

@@ -105,7 +105,7 @@ class LeakServiceTest {
     }
 
     @Test
-    @Disabled("Ignoring to implementation CI/CD") //###################################################################
+    @Disabled("Ignoring to implementation CI/CD")
     @DisplayName("Should exist Leak with id")
     void shouldExistsByid() {
         Integer id = 2;
