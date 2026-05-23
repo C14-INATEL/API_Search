@@ -1,9 +1,6 @@
 package com.api_search.project.service;
 
 import com.api_search.project.entity.Accounts;
-import com.api_search.project.entity.Accounts;
-import com.api_search.project.entity.Alert;
-import com.api_search.project.entity.User;
 import com.api_search.project.repository.AccountsRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.verification.VerificationMode;
 
 import java.util.ArrayList;
 import java.util.List;
