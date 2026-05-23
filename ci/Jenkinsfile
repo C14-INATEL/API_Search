@@ -12,8 +12,9 @@ pipeline {
         DB_URL = credentials('DB_URL')
         DB_USER = credentials('DB_USER')
         DB_PASSWORD = credentials('DB_PASSWORD')
+        DB_AUDIT_URL = credentials('DB_AUDIT_URL')
 
-        URL_BASE_FIND_BY_EMAIL_HIBP = credentials('URL_BASE_FIND_BY_EMAIL_HIBP ')
+        URL_BASE_FIND_BY_EMAIL_HIBP = credentials('URL_BASE_FIND_BY_EMAIL_HIBP')
         HIBP_API_KEY = credentials('HIBP_API_KEY')
     }
 
@@ -38,7 +39,8 @@ pipeline {
             string(credentialsId: 'DB_USER', variable: 'DB_USER'),
             string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD'),
             string(credentialsId: 'URL_BASE_FIND_BY_EMAIL_HIBP', variable: 'URL_BASE_FIND_BY_EMAIL_HIBP'),
-            string(credentialsId: 'HIBP_API_KEY', variable: 'HIBP_API_KEY')
+            string(credentialsId: 'HIBP_API_KEY', variable: 'HIBP_API_KEY'),
+            string(credentialsId: 'DB_AUDIT_URL', variable: 'DB_AUDIT_URL')
         ]) {
             sh '''
             mvn test \
@@ -46,7 +48,8 @@ pipeline {
             -Dspring.datasource.username=$DB_USER \
             -Dspring.datasource.password=$DB_PASSWORD \
             -Dhibp.base-url=$URL_BASE_FIND_BY_EMAIL_HIBP \
-            -Dhibp.api-key=$HIBP_API_KEY
+            -Dhibp.api-key=$HIBP_API_KEY \
+            -Daudit.datasource.url=$DB_AUDIT_URL
             '''
         }
     }
