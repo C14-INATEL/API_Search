@@ -4,7 +4,6 @@ import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,7 +14,7 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    /*
     public void save(User user){
         String password;
         String hash;
@@ -25,17 +24,21 @@ public class UserService {
         user.setPassword(hash);
 
         userRepository.save(user);
-    }
+    }*/
+    public void save(User user){
 
-    public User saveObject(User user) {
-        String password;
-        String hash;
+        System.out.println("DEBUG USER: " + user);
+        System.out.println("DEBUG EMAIL: " + user.getEmail());
+        System.out.println("DEBUG PASSWORD: " + user.getPassword());
 
-        password = user.getPassword();
-        hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        if (user.getPassword() == null) {
+            throw new RuntimeException("PASSWORD VEIO NULL");
+        }
+
+        String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hash);
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public User searchById(Integer id){
@@ -43,7 +46,6 @@ public class UserService {
     }
 
     public List<User> searchAll(){
-
         return userRepository.findAll();
     }
 
@@ -59,4 +61,10 @@ public class UserService {
         userRepository.deleteAll();
     }
 
+    public User update(Integer id, User userRequest) {
+        User existing = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not exist " + id));
+        existing.setName(userRequest.getName());
+        existing.setEmail(userRequest.getEmail());
+        return userRepository.save(existing);
+    }
 }
