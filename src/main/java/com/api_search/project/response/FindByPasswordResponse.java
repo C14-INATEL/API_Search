@@ -14,7 +14,7 @@ public class FindByPasswordResponse {
                     return "Password leaked " + parts[1].trim() + " time";
                 }
             }
-            return "Password was not found in leaked password logs";
+            return "Password was not found in leakeds password logs";
         }
         catch (Exception e)
         {
