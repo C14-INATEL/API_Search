@@ -60,7 +60,7 @@ public class AccountsController{
     public void deleteALL(){
         accountsService.deleteALL();
     }
-    
+
     @PostMapping("/accountMonitored/{userId}/{email}")
     public ResponseEntity <String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) {
         findByEmailClient
