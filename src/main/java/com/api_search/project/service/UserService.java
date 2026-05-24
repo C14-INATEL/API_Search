@@ -4,6 +4,8 @@ import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
+import java.sql.Struct;
 import java.util.List;
 
 @Service
@@ -14,33 +16,34 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    /*
+
     public void save(User user){
-        String password;
-        String hash;
-
-        password = user.getPassword();
-        hash = BCrypt.hashpw(password, BCrypt.gensalt());
-        user.setPassword(hash);
-
-        userRepository.save(user);
-    }*/
-    public void save(User user){
-
-        System.out.println("DEBUG USER: " + user);
-        System.out.println("DEBUG EMAIL: " + user.getEmail());
-        System.out.println("DEBUG PASSWORD: " + user.getPassword());
-
         if (user.getPassword() == null) {
-            throw new RuntimeException("PASSWORD VEIO NULL");
+            throw new RuntimeException("PASSWORD IS NULL");
         }
 
-        String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        String hash = hashCrypt(user.getPassword());
         user.setPassword(hash);
 
         userRepository.save(user);
     }
+    public String hashCrypt(String password){
+        String passwordCrypt;
 
+        passwordCrypt = BCrypt.hashpw(password, BCrypt.gensalt());
+        return  passwordCrypt;
+    }
+
+    public Boolean checkPassword(String password){
+        String passwordCrypt = hashCrypt(password);
+        boolean isValid = BCrypt.checkpw(password,passwordCrypt);
+        if (isValid){
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
     public User searchById(Integer id){
         return userRepository.findById(id).orElse(null);
     }
