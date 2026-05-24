@@ -4,7 +4,8 @@ import com.api_search.project.entity.User;
 import com.api_search.project.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
+import java.sql.Struct;
 import java.util.List;
 
 @Service
@@ -17,33 +18,37 @@ public class UserService {
     }
 
     public void save(User user){
-        String password;
-        String hash;
+        if (user.getPassword() == null) {
+            throw new RuntimeException("PASSWORD IS NULL");
+        }
 
-        password = user.getPassword();
-        hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        String hash = hashCrypt(user.getPassword());
         user.setPassword(hash);
 
         userRepository.save(user);
     }
+    public String hashCrypt(String password){
+        String passwordCrypt;
 
-    public User saveObject(User user) {
-        String password;
-        String hash;
-
-        password = user.getPassword();
-        hash = BCrypt.hashpw(password, BCrypt.gensalt());
-        user.setPassword(hash);
-
-        return userRepository.save(user);
+        passwordCrypt = BCrypt.hashpw(password, BCrypt.gensalt());
+        return  passwordCrypt;
     }
 
+    public Boolean checkPassword(String password){
+        String passwordCrypt = hashCrypt(password);
+        boolean isValid = BCrypt.checkpw(password,passwordCrypt);
+        if (isValid){
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
     public User searchById(Integer id){
         return userRepository.findById(id).orElse(null);
     }
 
     public List<User> searchAll(){
-
         return userRepository.findAll();
     }
 
@@ -59,4 +64,10 @@ public class UserService {
         userRepository.deleteAll();
     }
 
+    public User update(Integer id, User userRequest) {
+        User existing = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not exist " + id));
+        existing.setName(userRequest.getName());
+        existing.setEmail(userRequest.getEmail());
+        return userRepository.save(existing);
+    }
 }

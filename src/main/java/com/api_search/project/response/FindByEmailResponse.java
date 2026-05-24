@@ -27,4 +27,156 @@ public class FindByEmailResponse {
     private boolean IsMalware;
     private boolean IsSubscriptionFree;
     private boolean IsStealerLog;
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    public String getDomain() {
+        return Domain;
+    }
+
+    public void setDomain(String domain) {
+        Domain = domain;
+    }
+
+    public String getLogoPath() {
+        return LogoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        LogoPath = logoPath;
+    }
+
+    public String getAttribution() {
+        return Attribution;
+    }
+
+    public void setAttribution(String attribution) {
+        Attribution = attribution;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public Integer getPwnCount() {
+        return PwnCount;
+    }
+
+    public void setPwnCount(Integer pwnCount) {
+        PwnCount = pwnCount;
+    }
+
+    public LocalDate getBreachDate() {
+        return BreachDate;
+    }
+
+    public void setBreachDate(LocalDate breachDate) {
+        BreachDate = breachDate;
+    }
+
+    public OffsetDateTime getAddedDate() {
+        return AddedDate;
+    }
+
+    public void setAddedDate(OffsetDateTime addedDate) {
+        AddedDate = addedDate;
+    }
+
+    public OffsetDateTime getModifiedDate() {
+        return ModifiedDate;
+    }
+
+    public void setModifiedDate(OffsetDateTime modifiedDate) {
+        ModifiedDate = modifiedDate;
+    }
+
+    public List<String> getDataClasses() {
+        return DataClasses;
+    }
+
+    public void setDataClasses(List<String> dataClasses) {
+        DataClasses = dataClasses;
+    }
+
+    public boolean isVerified() {
+        return IsVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        IsVerified = verified;
+    }
+
+    public boolean isFabricated() {
+        return IsFabricated;
+    }
+
+    public void setFabricated(boolean fabricated) {
+        IsFabricated = fabricated;
+    }
+
+    public boolean isSensitive() {
+        return IsSensitive;
+    }
+
+    public void setSensitive(boolean sensitive) {
+        IsSensitive = sensitive;
+    }
+
+    public boolean isRetired() {
+        return IsRetired;
+    }
+
+    public void setRetired(boolean retired) {
+        IsRetired = retired;
+    }
+
+    public boolean isSpamList() {
+        return IsSpamList;
+    }
+
+    public void setSpamList(boolean spamList) {
+        IsSpamList = spamList;
+    }
+
+    public boolean isMalware() {
+        return IsMalware;
+    }
+
+    public void setMalware(boolean malware) {
+        IsMalware = malware;
+    }
+
+    public boolean isSubscriptionFree() {
+        return IsSubscriptionFree;
+    }
+
+    public void setSubscriptionFree(boolean subscriptionFree) {
+        IsSubscriptionFree = subscriptionFree;
+    }
+
+    public boolean isStealerLog() {
+        return IsStealerLog;
+    }
+
+    public void setStealerLog(boolean stealerLog) {
+        IsStealerLog = stealerLog;
+    }
 }

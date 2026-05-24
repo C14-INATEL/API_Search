@@ -33,7 +33,7 @@ public class FindByEmailClient {
                 .accept(APPLICATION_JSON)
                 .retrieve()
                 .onStatus(HttpStatusCode::is5xxServerError, response ->
-                        Mono.error(new RuntimeException("Erro 5xx: servidor indisponível"))
+                        Mono.error(new RuntimeException("Error 5xx: server not found"))
                 )
                 .onStatus(HttpStatusCode::is4xxClientError, error -> Mono.error(new RuntimeException("Verify the parameters ")))
                 .bodyToFlux(FindByEmailResponse.class);

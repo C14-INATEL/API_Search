@@ -1,8 +1,10 @@
 package com.api_search.project.controller;
 
+import com.api_search.project.client.FindByEmailClient;
 import com.api_search.project.entity.Accounts;
-import com.api_search.project.entity.Alert;
+import com.api_search.project.response.FindByEmailResponse;
 import com.api_search.project.service.AccountsService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,11 +13,13 @@ import java.util.List;
 @RequestMapping("/accounts")
 public class AccountsController{
     private AccountsService accountsService;
+    private FindByEmailClient findByEmailClient;
 
     // Construtor
 
-    public AccountsController(AccountsService accountsService) {
+    public AccountsController(AccountsService accountsService, FindByEmailClient findByEmailClient) {
         this.accountsService = accountsService;
+        this.findByEmailClient= findByEmailClient;
     }
 
     @PostMapping
@@ -57,31 +61,12 @@ public class AccountsController{
         accountsService.deleteALL();
     }
 
-    @PutMapping("/{id}/update_adress")
-    public Accounts updateEmail(@PathVariable Integer id, @RequestBody Accounts accounts) {
-        Accounts accounts_update = accountsService.searchById(id);
-        accounts_update.setAddress(accounts.getAddress());
-        return accountsService.saveObject(accounts_update);
-    }
-
-    @PutMapping("/{id}/update_description")
-    public Accounts updateAccount(@PathVariable Integer id, @RequestBody Accounts accounts) {
-        Accounts accounts_update = accountsService.searchById(id);
-        accounts_update.setDescription(accounts.getDescription());
-        return accountsService.saveObject(accounts_update);
-    }
-
-    @PutMapping("/{id}/update_status")
-    public Accounts updateRiskStatus(@PathVariable Integer id, @RequestBody Accounts accounts) {
-        Accounts accounts_update = accountsService.searchById(id);
-        accounts_update.setStatus(accounts.getStatus());
-        return accountsService.saveObject(accounts_update);
-    }
-
-    @PutMapping("/{id}/update_password")
-    public Accounts updateRiskPassword(@PathVariable Integer id, @RequestBody Accounts accounts) {
-        Accounts accounts_update = accountsService.searchById(id);
-        accounts_update.setPassword_hash(accounts.getPassword_hash());
-        return accountsService.saveObject(accounts_update);
+    @PostMapping("/accountMonitored/{userId}/{email}")
+    public ResponseEntity <String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) {
+        findByEmailClient
+                .findByEmailResponseFlux(email)
+                .doOnNext(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto,email, userId))
+                .subscribe();
+        return ResponseEntity.ok("Account added successfully");
     }
 }
