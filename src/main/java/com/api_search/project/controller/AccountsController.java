@@ -1,7 +1,10 @@
 package com.api_search.project.controller;
 
+import com.api_search.project.client.FindByEmailClient;
 import com.api_search.project.entity.Accounts;
+import com.api_search.project.response.FindByEmailResponse;
 import com.api_search.project.service.AccountsService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,11 +13,13 @@ import java.util.List;
 @RequestMapping("/accounts")
 public class AccountsController{
     private AccountsService accountsService;
+    private FindByEmailClient findByEmailClient;
 
     // Construtor
 
-    public AccountsController(AccountsService accountsService) {
+    public AccountsController(AccountsService accountsService, FindByEmailClient findByEmailClient) {
         this.accountsService = accountsService;
+        this.findByEmailClient= findByEmailClient;
     }
 
     @PostMapping
@@ -54,5 +59,13 @@ public class AccountsController{
     @DeleteMapping
     public void deleteALL(){
         accountsService.deleteALL();
+    }
+    @PostMapping("/accountMonitored/{userId}/{email}")
+    public ResponseEntity <String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) {
+        findByEmailClient
+                .findByEmailResponseFlux(email)
+                .doOnNext(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto,email, userId))
+                .subscribe();
+        return ResponseEntity.ok("Account added successfully");
     }
 }
