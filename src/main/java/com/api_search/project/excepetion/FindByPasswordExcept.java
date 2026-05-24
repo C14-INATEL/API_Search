@@ -1,4 +1,4 @@
-package com.api_search.project.excepetion.client;
+package com.api_search.project.excepetion;
 
 public class FindByPasswordExcept extends RuntimeException {
     public FindByPasswordExcept(String message) {
