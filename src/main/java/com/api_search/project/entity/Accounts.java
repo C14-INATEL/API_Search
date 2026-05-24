@@ -5,9 +5,11 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "accounts_monitored")
+@Audited
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +33,10 @@ public class Accounts {
     @Column(name = "logo_path")
     private String logoPath;
 
-    @Column(name = "attribution")
+    @Column(name = "attribution", columnDefinition = "TEXT")
     private String attribution;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "pwn_count")
@@ -59,7 +61,7 @@ public class Accounts {
     private boolean isFabricated;
 
     @Column(name = "is_sensitive")
-    private boolean is_sensitive;
+    private boolean isSsensitive;
 
     @Column(name = "is_retired")
     private boolean isRetired;
@@ -204,12 +206,12 @@ public class Accounts {
         isFabricated = fabricated;
     }
 
-    public boolean isIs_sensitive() {
-        return is_sensitive;
+    public boolean isSsensitive() {
+        return isSsensitive;
     }
 
-    public void setIs_sensitive(boolean is_sensitive) {
-        this.is_sensitive = is_sensitive;
+    public void setSsensitive(boolean ssensitive) {
+        isSsensitive = ssensitive;
     }
 
     public boolean isRetired() {
