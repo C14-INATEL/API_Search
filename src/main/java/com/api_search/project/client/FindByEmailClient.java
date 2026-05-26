@@ -1,5 +1,6 @@
 package com.api_search.project.client;
 
+import com.api_search.project.excepetion.FindByEmailExcept;
 import com.api_search.project.response.FindByEmailResponse;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -24,20 +25,25 @@ public class FindByEmailClient {
         this.apiKey = apiKey;
     }
 
-    public Flux<FindByEmailResponse> findByEmailResponseFlux(String email){
-        log.info("Searching email -> [{}] in hibp ...", email);
-        return  webClient
-                .get()
-                .uri("/breachedAccount/{email}?truncateResponse=false", email)
-                .header("hibp-api-key", apiKey)
-                .accept(APPLICATION_JSON)
-                .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, response ->
-                        Mono.error(new RuntimeException("Error 5xx: server not found"))
-                )
-                .onStatus(HttpStatusCode::is4xxClientError, error -> Mono.error(new RuntimeException("Verify the parameters ")))
-                .bodyToFlux(FindByEmailResponse.class);
-
+    public Flux<FindByEmailResponse> findByEmailResponseFlux(String email) throws FindByEmailExcept {
+        try {
+            log.info("Searching email -> [{}] in hibp ...", email);
+            return webClient
+                    .get()
+                    .uri("/breachedAccount/{email}?truncateResponse=false", email)
+                    .header("hibp-api-key", apiKey)
+                    .accept(APPLICATION_JSON)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is5xxServerError, response ->
+                            Mono.error(new RuntimeException("Error 5xx: server not found"))
+                    )
+                    .onStatus(HttpStatusCode::is4xxClientError, error -> Mono.error(new RuntimeException("Verify the parameters ")))
+                    .bodyToFlux(FindByEmailResponse.class);
+        }
+        catch (Exception e)
+        {
+            throw new FindByEmailExcept(e.getMessage());
+        }
     }
 
 }
