@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FindByEmailTest {
+public class FindByEmailExceptTest {
     @Test
     void shouldCreateExceptionWithCorrectMessage() {
         FindByEmailExcept exception = new FindByEmailExcept("not found");
