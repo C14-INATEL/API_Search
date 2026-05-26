@@ -1,4 +1,4 @@
-package com.api_search.project.IntegrationTestClient;
+package com.api_search.project.Integration.client;
 
 import com.api_search.project.client.FindByEmailClient;
 import com.api_search.project.response.FindByEmailResponse;
