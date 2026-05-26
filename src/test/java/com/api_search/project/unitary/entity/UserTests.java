@@ -1,4 +1,4 @@
-package com.api_search.project.entity;
+package com.api_search.project.unitary.entity;
 
 import com.api_search.project.entity.User;
 import org.junit.jupiter.api.Test;
