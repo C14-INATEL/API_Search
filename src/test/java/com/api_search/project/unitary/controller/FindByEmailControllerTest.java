@@ -1,6 +1,5 @@
 package com.api_search.project.unitary.controller;
 import com.api_search.project.client.FindByEmailClient;
-import com.api_search.project.controller.AccountsController;
 import com.api_search.project.controller.FindByEmailController;
 import com.api_search.project.response.FindByEmailResponse;
 import org.junit.jupiter.api.Test;
