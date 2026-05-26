@@ -1,4 +1,4 @@
-package com.api_search.project;
+package com.api_search.project.unitary.response;
 
 import com.api_search.project.response.FindByEmailResponse;
 import org.junit.jupiter.api.Test;
