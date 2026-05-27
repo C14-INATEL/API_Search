@@ -16,6 +16,10 @@ pipeline {
 
         URL_BASE_FIND_BY_EMAIL_HIBP = credentials('URL_BASE_FIND_BY_EMAIL_HIBP')
         HIBP_API_KEY = credentials('HIBP_API_KEY')
+
+        SERVER = "luan@100.73.69.118"
+        STAGING_PATH = "/opt/api/spring-staging"
+        PRODUCTION_PATH = "/opt/api/spring-production"
     }
 
     stages {
@@ -51,9 +55,9 @@ pipeline {
             -Dhibp.api-key=$HIBP_API_KEY \
             -Daudit.datasource.url=$DB_AUDIT_URL
             '''
+            }
         }
     }
-}
 
         stage('Package Version'){
             steps {
@@ -68,11 +72,15 @@ pipeline {
                 }
             }
             steps {
-                sh """
-                echo "Deploy in staging"
-                mkdir -p staging
-                cp target/${APP_NAME}-${VERSION}.jar staging/
-                """
+                sshagent(['vps-ssh']) {
+                    sh """
+                        scp target/${APP_NAME}-${VERSION}.jar ${SERVER}:${STAGING_PATH}/app.jar
+
+                        ssh ${SERVER} '
+                            systemctl restart api-search-staging
+                        '
+                    """
+                }
             }
         }
 
@@ -83,11 +91,15 @@ pipeline {
                 }
             }
             steps {
-                sh """
-                echo "Deploy in production"
-                mkdir -p prod
-                cp target/${APP_NAME}-${VERSION}.jar prod/
-                """
+                sshagent(['vps-ssh']) {
+                    sh """
+                        scp target/${APP_NAME}-${VERSION}.jar ${SERVER}:${PROD_PATH}/app.jar
+
+                        ssh ${SERVER} '
+                            systemctl restart api-search
+                        '
+                    """
+                }
             }
         }
     }
