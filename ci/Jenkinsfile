@@ -31,7 +31,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "mvn clean package -DskipTests"
+                sh 'mvn clean package -DskipTests'
             }
         }
 
@@ -60,7 +60,7 @@ pipeline {
 
         stage('Package Version'){
             steps {
-                sh "mv target/*.jar target/${APP_NAME}-${VERSION}.jar"
+                sh 'mv target/*.jar target/${APP_NAME}-${VERSION}.jar'
             }
         }
 
@@ -71,10 +71,10 @@ pipeline {
                 }
             }
             steps {
-                sh """
+                sh '''
                    cp target/${APP_NAME}-${VERSION}.jar ${STAGING_PATH}/app.jar
                    sudo systemctl restart api-search-staging
-                """
+                '''
             }
         }
 
@@ -85,10 +85,10 @@ pipeline {
                 }
             }
             steps {
-                     sh """
+                     sh '''
                          cp target/${APP_NAME}-${VERSION}.jar ${PRODUCTION_PATH}/app.jar
                          sudo systemctl restart api-search
-                     """
+                     '''
             }
         }
     }
