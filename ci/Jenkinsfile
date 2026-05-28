@@ -136,7 +136,6 @@ pipeline {
                 to: "igor.luan.solutions@gmail.com"
             )
         }
-
         always {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
