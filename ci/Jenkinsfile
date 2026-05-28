@@ -71,12 +71,10 @@ pipeline {
                 }
             }
             steps {
-                sshagent(['vps-ssh']) {
-                    sh """
-                       cp target/${APP_NAME}-${VERSION}.jar ${STAGING_PATH}/app.jar
-                       sudo systemctl restart api-search-staging
-                    """
-                }
+                sh """
+                   cp target/${APP_NAME}-${VERSION}.jar ${STAGING_PATH}/app.jar
+                   sudo systemctl restart api-search-staging
+                """
             }
         }
 
@@ -87,12 +85,10 @@ pipeline {
                 }
             }
             steps {
-                sshagent(['vps-ssh']) {
                      sh """
                          cp target/${APP_NAME}-${VERSION}.jar ${PRODUCTION_PATH}/app.jar
                          sudo systemctl restart api-search
                      """
-                }
             }
         }
     }
