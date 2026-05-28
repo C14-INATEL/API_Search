@@ -14,67 +14,46 @@ public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(name = "user_id")
     private Integer userId;
-
     @Column(name = "email_monitored")
     private String emailMonitored;
-
     @Column(name = "name_breaches")
     private String nameBreaches;
-
     @Column(name = "title")
     private String title;
-
     @Column(name = "domain")
     private String domain;
-
     @Column(name = "logo_path")
     private String logoPath;
-
     @Column(name = "attribution", columnDefinition = "TEXT")
     private String attribution;
-
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
     @Column(name = "pwn_count")
     private Integer pwnCount;
-
     @Column(name = "breach_date")
     private LocalDate breachDate;
-
     @Column(name = "added_date")
     private OffsetDateTime addedDate;
-
     @Column(name = "modified_date")
     private OffsetDateTime modifiedDate;
-
     @Column(name = "data_classes")
     private List<String> dataClasses;
-
     @Column(name = "is_verified")
     private boolean isVerified;
-
     @Column(name = "is_fabricated")
     private boolean isFabricated;
-
     @Column(name = "is_sensitive")
     private boolean isSsensitive;
-
     @Column(name = "is_retired")
     private boolean isRetired;
-
     @Column(name = "is_spam_list")
     private boolean isSpamList;
-
     @Column(name = "is_malware")
     private boolean isMalware;
-
     @Column(name = "is_subscription_free")
     private boolean isSubscriptionFree;
-
     @Column(name = "is_stealer_log")
     private boolean isStealerLog;
 

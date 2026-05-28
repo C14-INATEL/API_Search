@@ -16,10 +16,12 @@ pipeline {
 
         URL_BASE_FIND_BY_EMAIL_HIBP = credentials('URL_BASE_FIND_BY_EMAIL_HIBP')
         HIBP_API_KEY = credentials('HIBP_API_KEY')
+
+        STAGING_PATH = "/opt/api/spring-staging"
+        PRODUCTION_PATH = "/opt/api/spring-production"
     }
 
     stages {
-
         stage('Checkout'){
             steps {
                 checkout scm
@@ -28,7 +30,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "mvn clean package -DskipTests"
+                sh 'mvn clean package -DskipTests'
             }
         }
 
@@ -51,13 +53,13 @@ pipeline {
             -Dhibp.api-key=$HIBP_API_KEY \
             -Daudit.datasource.url=$DB_AUDIT_URL
             '''
+            }
         }
     }
-}
 
         stage('Package Version'){
             steps {
-                sh "mv target/*.jar target/${APP_NAME}-${VERSION}.jar"
+                sh 'mv target/*.jar target/${APP_NAME}-${VERSION}.jar'
             }
         }
 
@@ -68,11 +70,10 @@ pipeline {
                 }
             }
             steps {
-                sh """
-                echo "Deploy in staging"
-                mkdir -p staging
-                cp target/${APP_NAME}-${VERSION}.jar staging/
-                """
+                sh '''
+                   cp target/${APP_NAME}-${VERSION}.jar ${STAGING_PATH}/app.jar
+                   sudo systemctl restart api-search-staging
+                '''
             }
         }
 
@@ -83,11 +84,10 @@ pipeline {
                 }
             }
             steps {
-                sh """
-                echo "Deploy in production"
-                mkdir -p prod
-                cp target/${APP_NAME}-${VERSION}.jar prod/
-                """
+                     sh '''
+                         cp target/${APP_NAME}-${VERSION}.jar ${PRODUCTION_PATH}/app.jar
+                         sudo systemctl restart api-search
+                     '''
             }
         }
     }
@@ -135,7 +135,6 @@ pipeline {
                 to: "igor.luan.solutions@gmail.com"
             )
         }
-
         always {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'

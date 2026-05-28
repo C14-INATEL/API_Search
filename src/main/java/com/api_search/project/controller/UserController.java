@@ -1,6 +1,7 @@
 package com.api_search.project.controller;
 
 import com.api_search.project.entity.User;
+import com.api_search.project.excepetion.UserExcept;
 import com.api_search.project.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,38 +18,87 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public void save(@RequestBody User user){
-        userService.save(user);
+    public void save(@RequestBody User user) throws UserExcept{
+        try
+        {
+            userService.save(user);
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public User searchById(@PathVariable Integer id){
-        return userService.searchById(id);
+    public User searchById(@PathVariable Integer id) throws UserExcept{
+        try
+        {
+            return userService.searchById(id);
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
     @GetMapping
-    public List<User> search(){
-        return userService.searchAll();
+    public List<User> search() throws UserExcept{
+        try
+        {
+            return userService.searchAll();
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}/exist")
-    public boolean existById(@PathVariable Integer id){
-        return userService.existsByid(id);
+    public boolean existById(@PathVariable Integer id) throws UserExcept{
+        try
+        {
+            return userService.existsByid(id);
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id){
-        userService.deleteByid(id);
+    public void delete(@PathVariable Integer id) throws UserExcept{
+        try
+        {
+            userService.deleteByid(id);
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
     @DeleteMapping
-    public void deleteALL(){
-        userService.deleteALL();
+    public void deleteALL() throws UserExcept{
+        try
+        {
+            userService.deleteALL();
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable Integer id, @RequestBody User user) {
-        return userService.update(id, user);
+    public User update(@PathVariable Integer id, @RequestBody User user) throws UserExcept{
+        try
+        {
+            return userService.update(id, user);
+        }
+        catch (Exception e)
+        {
+            throw new UserExcept(e.getMessage());
+        }
     }
 
 

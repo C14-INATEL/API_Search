@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class FindByPasswordExcept extends RuntimeException {
-    public FindByPasswordExcept(String message) {
-        super("Consult HIBP password Fail " + message);
+public class UserExcept extends RuntimeException {
+    public UserExcept(String message) {
+        super("Error in class User " + message);
     }
 }
