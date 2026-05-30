@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/checkPassword")
+@RequestMapping("/api-search/checkPassword")
 public class FindByPasswordController {
     @Autowired
     private FindByPasswordClient client;

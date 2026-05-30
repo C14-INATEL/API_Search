@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api-search/accounts")
 public class AccountsController{
     private AccountsService accountsService;
     private FindByEmailClient findByEmailClient;
