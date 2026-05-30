@@ -36,7 +36,7 @@ public class AccountsControllerTest {
     void shouldReturnAccountsById() throws Exception {
         when(accountsService.searchById(1)).thenReturn(null);
 
-        mockMvc.perform(get("/accounts/1"))
+        mockMvc.perform(get("/api-search/accounts/1"))
                 .andExpect(status().isOk());
     }
 
@@ -44,7 +44,7 @@ public class AccountsControllerTest {
     void shouldCheckIfAccountExists() throws Exception {
         when(accountsService.existsByid(1)).thenReturn(true);
 
-        mockMvc.perform(get("/accounts/1/exist"))
+        mockMvc.perform(get("/api-search//accounts/1/exist"))
                 .andExpect(status().isOk());
     }
 
@@ -52,13 +52,13 @@ public class AccountsControllerTest {
     void shouldGetAllAccounts() throws Exception {
         when(accountsService.searchAll()).thenReturn(java.util.List.of());
 
-        mockMvc.perform(get("/accounts"))
+        mockMvc.perform(get("/api-search/accounts"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void shouldSaveAccount() throws Exception {
-        mockMvc.perform(post("/accounts")
+        mockMvc.perform(post("/api-search/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"email\":\"test@example.com\"}"))
                 .andExpect(status().isOk());
@@ -70,13 +70,13 @@ public class AccountsControllerTest {
     void shouldReturnAccountsByUserId() throws Exception {
         when(accountsService.searchAccountsByUser(1)).thenReturn(List.of());
 
-        mockMvc.perform(get("/accounts/user/1"))
+        mockMvc.perform(get("/api-search/accounts/user/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void shouldDeleteById() throws Exception {
-        mockMvc.perform(delete("/accounts/1"))
+        mockMvc.perform(delete("/api-search/accounts/1"))
                 .andExpect(status().isOk());
 
         verify(accountsService, times(1)).deleteByid(1);
@@ -84,7 +84,7 @@ public class AccountsControllerTest {
 
     @Test
     void shouldDeleteAllUserAccounts() throws Exception {
-        mockMvc.perform(delete("/accounts/user/1"))
+        mockMvc.perform(delete("/api-search/accounts/user/1"))
                 .andExpect(status().isOk());
 
         verify(accountsService, times(1)).deleteAllUserAccounts(1);
@@ -92,7 +92,7 @@ public class AccountsControllerTest {
 
     @Test
     void shouldDeleteAll() throws Exception {
-        mockMvc.perform(delete("/accounts"))
+        mockMvc.perform(delete("/api-search/accounts"))
                 .andExpect(status().isOk());
 
         verify(accountsService, times(1)).deleteALL();
@@ -103,7 +103,7 @@ public class AccountsControllerTest {
         when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
                 .thenReturn(Flux.just(new FindByEmailResponse()));
 
-        mockMvc.perform(post("/accounts/accountMonitored/1/test@example.com"))
+        mockMvc.perform(post("/api-search/accounts/accountMonitored/1/test@example.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Account added successfully"));
 
