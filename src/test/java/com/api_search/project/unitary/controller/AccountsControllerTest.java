@@ -99,7 +99,7 @@ public class AccountsControllerTest {
     }
 
     @Test
-    void shouldMonitorAccount() throws Exception {
+    void shouldMonitorAccountWithBreaches() throws Exception {
         when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
                 .thenReturn(Flux.just(new FindByEmailResponse()));
 
@@ -109,6 +109,19 @@ public class AccountsControllerTest {
 
         verify(accountsService, times(1))
                 .saveFromResponseEmailWebClientHIBP(any(), eq("test@example.com"), eq(1));
+    }
+
+    @Test
+    void shouldMonitorAccountWithNoBreaches() throws Exception {
+        when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
+                .thenReturn(Flux.empty());
+
+        mockMvc.perform(post("/api-search/accounts/accountMonitored/1/test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Account added successfully"));
+
+        verify(accountsService, times(1))
+                .saveEmailWithNoBreaches(eq("test@example.com"), eq(1));
     }
 }
 
