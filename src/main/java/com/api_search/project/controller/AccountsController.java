@@ -111,16 +111,22 @@ public class AccountsController{
     }
 
     @PostMapping("/accountMonitored/{userId}/{email}")
-    public ResponseEntity <String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
+    public ResponseEntity<String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
         try {
             findByEmailClient
                     .findByEmailResponseFlux(email)
-                    .doOnNext(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId))
+                    .collectList()
+                    .doOnNext(list -> {
+                        if (list.isEmpty()) {
+                            accountsService.saveEmailWithNoBreaches(email, userId);
+                        } else {
+                            list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
+                        }
+                    })
                     .subscribe();
             return ResponseEntity.ok("Account added successfully");
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             throw new AccountsExcept(e.getMessage());
         }
     }
