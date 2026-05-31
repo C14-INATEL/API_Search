@@ -53,6 +53,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{email}/{password}")
+    public Integer searchUserWithEmailPassword(@PathVariable String email,@PathVariable String password) throws UserExcept {
+      try{
+        return  userService.searchUserWithEmailPassword(email,password);
+      }
+      catch (Exception e)
+      {
+          throw new UserExcept(e.getMessage());
+      }
+    }
+
     @GetMapping("/{id}/exist")
     public boolean existById(@PathVariable Integer id) throws UserExcept{
         try
