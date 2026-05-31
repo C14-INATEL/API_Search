@@ -63,12 +63,21 @@ public class FindByEmailClientTest {
     }
 
     @Test
-    void shouldThrowOnClientError() {
+    void shouldReturnEmptyOnNotFound() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(404));
 
         StepVerifier.create(client.findByEmailResponseFlux("test@example.com"))
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void shouldThrowOnClientError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(400));
+
+        StepVerifier.create(client.findByEmailResponseFlux("test@example.com"))
                 .expectErrorMatches(e -> e instanceof RuntimeException
-                        && e.getMessage().equals("Verify the parameters "))
+                        && e.getMessage().equals("Verify the parameters"))
                 .verify();
     }
 }
