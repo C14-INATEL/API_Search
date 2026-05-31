@@ -64,6 +64,27 @@ public class UserControllerTest {
     }
 
     @Test
+    void shouldReturnUserIdWhenEmailAndPasswordAreValid() throws Exception {
+
+        when(userService.searchUserWithEmailPassword("test@email.com", "123456"))
+                .thenReturn(1);
+
+        mockMvc.perform(get("/api-search/users/test@email.com/123456"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1"));
+    }
+
+    @Test
+    void shouldReturnErrorWhenEmailAndPasswordAreInvalid() throws Exception {
+
+        when(userService.searchUserWithEmailPassword("test@email.com", "wrongPassword"))
+                .thenThrow(new RuntimeException("Invalid Password"));
+
+        mockMvc.perform(get("/api-search/users/test@email.com/wrongPassword"))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test
     void shouldDeleteUserById() throws Exception {
         mockMvc.perform(delete("/api-search/users/1"))
                 .andExpect(status().isOk());
