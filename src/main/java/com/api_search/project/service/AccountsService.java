@@ -117,5 +117,12 @@ public class AccountsService {
         {
             throw new AccountsExcept(e.getMessage());
         }
+
+    }
+    public void saveEmailWithNoBreaches(String email, Integer userId) {
+        Accounts accounts = new Accounts();
+        accounts.setUserId(userId);
+        accounts.setEmailMonitored(email);
+        accountsRepository.save(accounts);
     }
 }
