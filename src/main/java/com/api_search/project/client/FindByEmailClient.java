@@ -7,13 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Service
-@Slf4j // annotation that will automatically log the data
+@Slf4j
 public class FindByEmailClient {
     private final WebClient webClient;
     private final String apiKey;
@@ -34,16 +35,23 @@ public class FindByEmailClient {
                     .header("hibp-api-key", apiKey)
                     .accept(APPLICATION_JSON)
                     .retrieve()
-                    .onStatus(HttpStatusCode::is5xxServerError, response ->
-                            Mono.error(new RuntimeException("Error 5xx: server not found"))
+                    .onStatus(
+                            HttpStatusCode::is5xxServerError,
+                            response -> Mono.error(new RuntimeException("Error 5xx: server not found"))
                     )
-                    .onStatus(HttpStatusCode::is4xxClientError, error -> Mono.error(new RuntimeException("Verify the parameters ")))
-                    .bodyToFlux(FindByEmailResponse.class);
+                    .onStatus(
+                            status -> status.is4xxClientError() && status.value() != 404,
+                            error -> Mono.error(new RuntimeException("Verify the parameters"))
+                    )
+                    .bodyToFlux(FindByEmailResponse.class)
+                    .onErrorResume(
+                            ex -> ex instanceof WebClientResponseException.NotFound,
+                            ex -> Flux.empty()
+                    )
+                    .switchIfEmpty(Flux.empty());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             throw new FindByEmailExcept(e.getMessage());
         }
     }
-
 }
