@@ -7,7 +7,6 @@ import com.api_search.project.response.FindByEmailResponse;
 import com.api_search.project.service.AccountsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -113,17 +112,17 @@ public class AccountsController{
     @PostMapping("/accountMonitored/{userId}/{email}")
     public ResponseEntity<String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
         try {
-            findByEmailClient
+            List<FindByEmailResponse> list = findByEmailClient
                     .findByEmailResponseFlux(email)
                     .collectList()
-                    .doOnNext(list -> {
-                        if (list.isEmpty()) {
-                            accountsService.saveEmailWithNoBreaches(email, userId);
-                        } else {
-                            list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
-                        }
-                    })
-                    .subscribe();
+                    .block();
+
+            if (list == null || list.isEmpty()) {
+                accountsService.saveEmailWithNoBreaches(email, userId);
+            } else {
+                list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
+            }
+
             return ResponseEntity.ok("Account added successfully");
         }
         catch (Exception e) {
