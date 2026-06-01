@@ -40,12 +40,16 @@ public class FindByEmailClient {
                     .accept(APPLICATION_JSON)
                     .retrieve()
                     .onStatus(
-                            HttpStatusCode::is5xxServerError,
-                            response -> Mono.error(new RuntimeException("Error 5xx: server not found"))
+                            status -> status.value() == 404,
+                            response -> Mono.empty()
                     )
                     .onStatus(
-                            status -> status.is4xxClientError() && status.value() != 404,
+                            HttpStatusCode::is4xxClientError,
                             error -> Mono.error(new RuntimeException("Verify the parameters"))
+                    )
+                    .onStatus(
+                            HttpStatusCode::is5xxServerError,
+                            response -> Mono.error(new RuntimeException("Error 5xx: server not found"))
                     )
                     .bodyToFlux(FindByEmailResponse.class)
                     .doOnNext(item -> log.info("HIBP retornou breach: {}", item))
@@ -56,20 +60,11 @@ public class FindByEmailClient {
                                     .filter(ex -> !(ex instanceof WebClientResponseException)
                                             && !(ex instanceof RuntimeException))
                     )
-                    .onErrorResume(
-                            ex -> ex instanceof WebClientResponseException.NotFound,
-                            ex -> Flux.empty()
-                    )
                     .onErrorResume(ex -> {
-                        if (ex instanceof RuntimeException) {
-                            return Flux.error(ex);
-                        }
                         log.warn("HIBP conexão falhou para [{}]: {}", email, ex.getMessage());
                         return Flux.error(ex);
-                    })
-                    .switchIfEmpty(Flux.empty());
-        }
-        catch (Exception e) {
+                    });
+        } catch (Exception e) {
             throw new FindByEmailExcept(e.getMessage());
         }
     }
