@@ -60,8 +60,8 @@ public class FindByEmailClient {
                         if (ex instanceof RuntimeException) {
                             return Flux.error(ex);
                         }
-                        log.warn("HIBP falhou para [{}]: {}", email, ex.getMessage());
-                        return Flux.empty();
+                        log.warn("HIBP conexão falhou para [{}]: {}", email, ex.getMessage());
+                        return Flux.error(ex);
                     })
                     .switchIfEmpty(Flux.empty());
         }
