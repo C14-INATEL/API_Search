@@ -28,7 +28,6 @@ public class FindByEmailClient {
                 .build();
         this.apiKey = apiKey;
     }
-
     public Flux<FindByEmailResponse> findByEmailResponseFlux(String email) throws FindByEmailExcept {
         try {
             log.info("Searching email -> [{}] in hibp ...", email);
@@ -36,6 +35,7 @@ public class FindByEmailClient {
                     .get()
                     .uri("/breachedAccount/{email}?truncateResponse=false", email)
                     .header("hibp-api-key", apiKey)
+                    .header("User-Agent", "api-search-app")
                     .accept(APPLICATION_JSON)
                     .retrieve()
                     .onStatus(
