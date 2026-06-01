@@ -134,18 +134,17 @@ public class AccountsController{
     @PutMapping("/refresh/{userId}/{email}")
     public ResponseEntity<String> refreshAccount(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
         try {
-            accountsService.deleteByUserIdAndEmail(userId, email);
-
             List<FindByEmailResponse> list = findByEmailClient
                     .findByEmailResponseFlux(email)
                     .collectList()
                     .block();
 
             if (list == null || list.isEmpty()) {
-                accountsService.saveEmailWithNoBreaches(email, userId);
-            } else {
-                list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
+                return ResponseEntity.ok("No breaches found, keeping existing data");
             }
+
+            accountsService.deleteByUserIdAndEmail(userId, email);
+            list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
 
             return ResponseEntity.ok("Refreshed successfully");
         } catch (Exception e) {

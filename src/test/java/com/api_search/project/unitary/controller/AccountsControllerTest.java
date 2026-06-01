@@ -147,13 +147,13 @@ public class AccountsControllerTest {
 
         mockMvc.perform(put("/api-search/accounts/refresh/1/test@example.com"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Refreshed successfully"));
+                .andExpect(content().string("No breaches found, keeping existing data"));
 
-        verify(accountsService, times(1))
-                .deleteByUserIdAndEmail(eq(1), eq("test@example.com"));
+        verify(accountsService, never())
+                .deleteByUserIdAndEmail(any(), any());
 
-        verify(accountsService, times(1))
-                .saveEmailWithNoBreaches(eq("test@example.com"), eq(1));
+        verify(accountsService, never())
+                .saveEmailWithNoBreaches(any(), any());
     }
 }
 
