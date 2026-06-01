@@ -28,6 +28,7 @@ public class FindByEmailClient {
                 .build();
         this.apiKey = apiKey;
     }
+
     public Flux<FindByEmailResponse> findByEmailResponseFlux(String email) throws FindByEmailExcept {
         try {
             log.info("Searching email -> [{}] in hibp ...", email);
@@ -47,6 +48,9 @@ public class FindByEmailClient {
                             error -> Mono.error(new RuntimeException("Verify the parameters"))
                     )
                     .bodyToFlux(FindByEmailResponse.class)
+                    .doOnNext(item -> log.info("HIBP retornou breach: {}", item))
+                    .doOnComplete(() -> log.info("HIBP completou para [{}]", email))
+                    .doOnError(err -> log.error("HIBP erro para [{}]: {}", email, err.getMessage()))
                     .retryWhen(
                             Retry.backoff(3, Duration.ofSeconds(2))
                                     .filter(ex -> !(ex instanceof WebClientResponseException)
