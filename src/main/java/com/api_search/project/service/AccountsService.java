@@ -125,4 +125,13 @@ public class AccountsService {
         accounts.setEmailMonitored(email);
         accountsRepository.save(accounts);
     }
+
+    @Transactional
+    public void deleteByUserIdAndEmail(Integer userId, String email) throws AccountsExcept {
+        try {
+            accountsRepository.deleteByUserIdAndEmailMonitored(userId, email);
+        } catch (Exception e) {
+            throw new AccountsExcept(e.getMessage());
+        }
+    }
 }

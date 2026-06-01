@@ -3,6 +3,7 @@ package com.api_search.project.controller;
 import com.api_search.project.client.FindByEmailClient;
 import com.api_search.project.entity.Accounts;
 import com.api_search.project.excepetion.AccountsExcept;
+import com.api_search.project.repository.AccountsRepository;
 import com.api_search.project.response.FindByEmailResponse;
 import com.api_search.project.service.AccountsService;
 import org.springframework.http.ResponseEntity;
@@ -126,6 +127,28 @@ public class AccountsController{
             return ResponseEntity.ok("Account added successfully");
         }
         catch (Exception e) {
+            throw new AccountsExcept(e.getMessage());
+        }
+    }
+
+    @PutMapping("/refresh/{userId}/{email}")
+    public ResponseEntity<String> refreshAccount(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
+        try {
+            accountsService.deleteByUserIdAndEmail(userId, email);
+
+            List<FindByEmailResponse> list = findByEmailClient
+                    .findByEmailResponseFlux(email)
+                    .collectList()
+                    .block();
+
+            if (list == null || list.isEmpty()) {
+                accountsService.saveEmailWithNoBreaches(email, userId);
+            } else {
+                list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
+            }
+
+            return ResponseEntity.ok("Refreshed successfully");
+        } catch (Exception e) {
             throw new AccountsExcept(e.getMessage());
         }
     }

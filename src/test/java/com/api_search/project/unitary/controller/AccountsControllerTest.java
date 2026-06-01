@@ -123,6 +123,38 @@ public class AccountsControllerTest {
         verify(accountsService, times(1))
                 .saveEmailWithNoBreaches(eq("test@example.com"), eq(1));
     }
+
+    @Test
+    void shouldRefreshAccountWithBreaches() throws Exception {
+        when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
+                .thenReturn(Flux.just(new FindByEmailResponse()));
+
+        mockMvc.perform(put("/api-search/accounts/refresh/1/test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Refreshed successfully"));
+
+        verify(accountsService, times(1))
+                .deleteByUserIdAndEmail(eq(1), eq("test@example.com"));
+
+        verify(accountsService, times(1))
+                .saveFromResponseEmailWebClientHIBP(any(), eq("test@example.com"), eq(1));
+    }
+
+    @Test
+    void shouldRefreshAccountWithNoBreaches() throws Exception {
+        when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
+                .thenReturn(Flux.empty());
+
+        mockMvc.perform(put("/api-search/accounts/refresh/1/test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Refreshed successfully"));
+
+        verify(accountsService, times(1))
+                .deleteByUserIdAndEmail(eq(1), eq("test@example.com"));
+
+        verify(accountsService, times(1))
+                .saveEmailWithNoBreaches(eq("test@example.com"), eq(1));
+    }
 }
 
 

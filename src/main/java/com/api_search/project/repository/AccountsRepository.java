@@ -10,4 +10,5 @@ import java.util.List;
 public interface AccountsRepository extends JpaRepository<Accounts, Integer>{
     List<Accounts> findByUserId(Integer userId);
     void deleteByUserId(Integer userId);
+    void deleteByUserIdAndEmailMonitored(Integer userId, String emailMonitored);
 }
