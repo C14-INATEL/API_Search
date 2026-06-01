@@ -10,6 +10,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+
+import java.time.Duration;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -44,10 +47,22 @@ public class FindByEmailClient {
                             error -> Mono.error(new RuntimeException("Verify the parameters"))
                     )
                     .bodyToFlux(FindByEmailResponse.class)
+                    .retryWhen(
+                            Retry.backoff(3, Duration.ofSeconds(2))
+                                    .filter(ex -> !(ex instanceof WebClientResponseException)
+                                            && !(ex instanceof RuntimeException))
+                    )
                     .onErrorResume(
                             ex -> ex instanceof WebClientResponseException.NotFound,
                             ex -> Flux.empty()
                     )
+                    .onErrorResume(ex -> {
+                        if (ex instanceof RuntimeException) {
+                            return Flux.error(ex);
+                        }
+                        log.warn("HIBP falhou para [{}]: {}", email, ex.getMessage());
+                        return Flux.empty();
+                    })
                     .switchIfEmpty(Flux.empty());
         }
         catch (Exception e) {
