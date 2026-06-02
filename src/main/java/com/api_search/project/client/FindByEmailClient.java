@@ -41,7 +41,7 @@ public class FindByEmailClient {
                     .retrieve()
                     .onStatus(
                             status -> status.value() == 404,
-                            response -> Mono.empty()
+                            response -> Mono.error(new FindByEmailExcept())
                     )
                     .onStatus(
                             HttpStatusCode::is4xxClientError,
@@ -60,6 +60,10 @@ public class FindByEmailClient {
                                     .filter(ex -> !(ex instanceof WebClientResponseException)
                                             && !(ex instanceof RuntimeException))
                     )
+                    .onErrorResume(FindByEmailExcept.class, ex -> {
+                        log.info("Nenhum vazamento encontrado para [{}]", email);
+                        return Flux.just(new FindByEmailResponse());
+                    })
                     .onErrorResume(ex -> {
                         log.warn("HIBP conexão falhou para [{}]: {}", email, ex.getMessage());
                         return Flux.error(ex);
