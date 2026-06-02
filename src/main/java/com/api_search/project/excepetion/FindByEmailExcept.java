@@ -8,4 +8,7 @@ public class FindByEmailExcept extends RuntimeException {
     public FindByEmailExcept(String message) {
         super("Error in client FindByEmail: " + message);
     }
+    public FindByEmailExcept() {
+        super("Nenhum vazamento encontrado para este email");
+    }
 }
