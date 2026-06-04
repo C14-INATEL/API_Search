@@ -155,6 +155,14 @@ public class AccountsControllerTest {
         verify(accountsService, never())
                 .saveEmailWithNoBreaches(any(), any());
     }
+
+    @Test
+    void shouldDeleteByEmail() throws Exception {
+        mockMvc.perform(delete("/api-search/accounts/email/test@example.com"))
+                .andExpect(status().isOk());
+
+        verify(accountsService, times(1)).deleteByEmail("test@example.com");
+    }
 }
 
 

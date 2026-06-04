@@ -63,6 +63,14 @@ public class AccountsService {
         }
     }
 
+    public void deleteByEmail(String email) throws  AccountsExcept{
+        try {
+            accountsRepository.deleteByEmail(email);
+        }catch (Exception e){
+            throw new AccountsExcept(e.getMessage());
+        }
+    }
+
     public void deleteByid(Integer id) throws AccountsExcept{
         try{
             accountsRepository.deleteById(id);
