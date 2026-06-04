@@ -56,12 +56,10 @@ public class UserService {
 
     public Integer searchUserWithEmailPassword(String email, String password) throws UserExcept {
         try {
-            String passwordDecoded = java.net.URLDecoder.decode(password, "UTF-8");
-
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            boolean validPassword = BCrypt.checkpw(passwordDecoded, user.getPassword());
+            boolean validPassword = BCrypt.checkpw(password, user.getPassword());
 
             if (!validPassword) {
                 throw new RuntimeException("Invalid Password");
