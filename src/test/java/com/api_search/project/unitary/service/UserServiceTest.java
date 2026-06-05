@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,9 +22,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserService")
-
-
 public class UserServiceTest {
+
     @Mock
     private UserRepository userRepository;
 
@@ -57,6 +57,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when password is null")
         void shouldThrowWhenPasswordIsNull() {
             user.setPassword(null);
+
             assertThatThrownBy(() -> userService.save(user))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("PASSWORD IS NULL");
@@ -66,6 +67,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             doThrow(new RuntimeException("DB error")).when(userRepository).save(any());
+
             assertThatThrownBy(() -> userService.save(user))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");
@@ -80,6 +82,7 @@ public class UserServiceTest {
         @DisplayName("should return a bcrypt hashed password")
         void shouldReturnHashedPassword() throws UserExcept {
             String hash = userService.hashCrypt("plainPassword");
+
             assertThat(hash).isNotNull();
             assertThat(hash).isNotEqualTo("plainPassword");
             assertThat(hash).startsWith("$2a$");
@@ -91,10 +94,81 @@ public class UserServiceTest {
     class CheckPassword {
 
         @Test
-        @DisplayName("should return true for a valid password")
-        void shouldReturnTrueForValidPassword() throws UserExcept {
-            Boolean result = userService.checkPassword("plainPassword");
+        @DisplayName("should return true when password matches hash")
+        void shouldReturnTrueWhenPasswordMatchesHash() throws UserExcept {
+            String password = "plainPassword";
+            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+
+            Boolean result = userService.checkPassword(password, hash);
+
             assertThat(result).isTrue();
+        }
+
+        @Test
+        @DisplayName("should return false when password does not match hash")
+        void shouldReturnFalseWhenPasswordDoesNotMatchHash() throws UserExcept {
+            String hash = BCrypt.hashpw("correctPassword", BCrypt.gensalt());
+
+            Boolean result = userService.checkPassword("wrongPassword", hash);
+
+            assertThat(result).isFalse();
+        }
+    }
+
+    @Nested
+    @DisplayName("searchUserWithEmailPassword()")
+    class SearchUserWithEmailPassword {
+
+        @Test
+        @DisplayName("should return user id when credentials are valid")
+        void shouldReturnUserIdWhenCredentialsAreValid() throws UserExcept {
+            User user = new User();
+            user.setId(1);
+            user.setEmail("test@email.com");
+            user.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
+
+            when(userRepository.findByEmail("test@email.com"))
+                    .thenReturn(Optional.of(user));
+
+            Integer result = userService.searchUserWithEmailPassword(
+                    "test@email.com",
+                    "123456"
+            );
+
+            assertThat(result).isEqualTo(1);
+        }
+
+        @Test
+        @DisplayName("should throw UserExcept when user is not found")
+        void shouldThrowUserExceptWhenUserIsNotFound() {
+            when(userRepository.findByEmail("test@email.com"))
+                    .thenReturn(Optional.empty());
+
+            assertThatThrownBy(() ->
+                    userService.searchUserWithEmailPassword(
+                            "test@email.com",
+                            "123456"))
+                    .isInstanceOf(UserExcept.class)
+                    .hasMessageContaining("User not found");
+        }
+
+        @Test
+        @DisplayName("should throw UserExcept when password is invalid")
+        void shouldThrowUserExceptWhenPasswordIsInvalid() {
+            User user = new User();
+            user.setId(1);
+            user.setEmail("test@email.com");
+            user.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
+
+            when(userRepository.findByEmail("test@email.com"))
+                    .thenReturn(Optional.of(user));
+
+            assertThatThrownBy(() ->
+                    userService.searchUserWithEmailPassword(
+                            "test@email.com",
+                            "wrongPassword"))
+                    .isInstanceOf(UserExcept.class)
+                    .hasMessageContaining("Invalid Password");
         }
     }
 
@@ -120,6 +194,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             when(userRepository.findById(1)).thenThrow(new RuntimeException("DB error"));
+
             assertThatThrownBy(() -> userService.searchById(1))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");
@@ -134,13 +209,17 @@ public class UserServiceTest {
         @DisplayName("should return all users")
         void shouldReturnAll() throws UserExcept {
             when(userRepository.findAll()).thenReturn(List.of(user));
-            assertThat(userService.searchAll()).hasSize(1).containsExactly(user);
+
+            assertThat(userService.searchAll())
+                    .hasSize(1)
+                    .containsExactly(user);
         }
 
         @Test
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             when(userRepository.findAll()).thenThrow(new RuntimeException("DB error"));
+
             assertThatThrownBy(() -> userService.searchAll())
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");
@@ -169,6 +248,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             when(userRepository.existsById(1)).thenThrow(new RuntimeException("DB error"));
+
             assertThatThrownBy(() -> userService.existsByid(1))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");
@@ -190,6 +270,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             doThrow(new RuntimeException("DB error")).when(userRepository).deleteById(1);
+
             assertThatThrownBy(() -> userService.deleteByid(1))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");
@@ -211,6 +292,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             doThrow(new RuntimeException("DB error")).when(userRepository).deleteAll();
+
             assertThatThrownBy(() -> userService.deleteALL())
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");
@@ -242,6 +324,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when user does not exist")
         void shouldThrowWhenUserNotFound() {
             when(userRepository.findById(99)).thenReturn(Optional.empty());
+
             assertThatThrownBy(() -> userService.update(99, new User()))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("User not exist 99");
@@ -251,6 +334,7 @@ public class UserServiceTest {
         @DisplayName("should throw UserExcept when repository throws RuntimeException")
         void shouldThrowUserExceptOnError() {
             when(userRepository.findById(1)).thenThrow(new RuntimeException("DB error"));
+
             assertThatThrownBy(() -> userService.update(1, new User()))
                     .isInstanceOf(UserExcept.class)
                     .hasMessageContaining("DB error");

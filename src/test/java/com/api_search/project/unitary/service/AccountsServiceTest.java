@@ -279,5 +279,26 @@ public class AccountsServiceTest {
                     .isInstanceOf(AccountsExcept.class)
                     .hasMessageContaining("DB error");
         }
+
+        @Nested
+        @DisplayName("deleteByEmail()")
+        class DeleteByEmail {
+
+            @Test
+            @DisplayName("should delete without throwing exception")
+            void shouldDeleteWithoutException() {
+                assertThatCode(() -> accountsService.deleteByEmail("test@example.com")).doesNotThrowAnyException();
+                verify(accountsRepository, times(1)).deleteByEmail("test@example.com");
+            }
+
+            @Test
+            @DisplayName("should throw AccountsExcept when repository throws RuntimeException")
+            void shouldThrowAccountsExceptOnError() {
+                doThrow(new RuntimeException("DB error")).when(accountsRepository).deleteByEmail("test@example.com");
+                assertThatThrownBy(() -> accountsService.deleteByEmail("test@example.com"))
+                        .isInstanceOf(AccountsExcept.class)
+                        .hasMessageContaining("DB error");
+            }
+        }
     }
 }

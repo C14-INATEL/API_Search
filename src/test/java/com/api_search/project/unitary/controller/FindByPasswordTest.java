@@ -34,8 +34,8 @@ public class FindByPasswordTest {
         when(client.checkPassword("password123")).thenReturn(body);
         when(response.parse(body, suffix)).thenReturn("Password found 10 times!");
 
-        mockMvc.perform(get("/checkPassword/password")
-                        .param("password", "password123"))
+        mockMvc.perform(get("/api-search/checkPassword/password")
+                .param("password", "password123"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Password found 10 times!"));
     }
@@ -44,8 +44,8 @@ public class FindByPasswordTest {
     void shouldReturnErrorWhenExceptionThrown() throws Exception {
         when(client.sha1("password123")).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/checkPassword/password")
-                        .param("password", "password123"))
+        mockMvc.perform(get("/api-search/checkPassword/password")
+                .param("password", "password123"))
                 .andExpect(status().isInternalServerError());
     }
 

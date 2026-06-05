@@ -46,22 +46,32 @@ public class UserService {
         }
     }
 
-    public Boolean checkPassword(String password) throws UserExcept{
-        try
-        {
-            String passwordCrypt = hashCrypt(password);
-            boolean isValid = BCrypt.checkpw(password,passwordCrypt);
-            if (isValid){
-                return true;
-            }else
-            {
-                return false;
-            }
-        }
-        catch (Exception e){
+    public Boolean checkPassword(String password, String hashPassword) throws UserExcept {
+        try {
+            return BCrypt.checkpw(password, hashPassword);
+        } catch (Exception e) {
             throw new UserExcept(e.getMessage());
         }
     }
+
+    public Integer searchUserWithEmailPassword(String email, String password) throws UserExcept {
+        try {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            boolean validPassword = BCrypt.checkpw(password, user.getPassword());
+
+            if (!validPassword) {
+                throw new RuntimeException("Invalid Password");
+            }
+
+            return user.getId();
+
+        } catch (Exception e) {
+            throw new UserExcept(e.getMessage());
+        }
+    }
+
     public User searchById(Integer id) throws UserExcept{
         try {
             return userRepository.findById(id).orElse(null);

@@ -3,15 +3,16 @@ package com.api_search.project.controller;
 import com.api_search.project.client.FindByEmailClient;
 import com.api_search.project.entity.Accounts;
 import com.api_search.project.excepetion.AccountsExcept;
+import com.api_search.project.repository.AccountsRepository;
 import com.api_search.project.response.FindByEmailResponse;
 import com.api_search.project.service.AccountsService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api-search/accounts")
 public class AccountsController{
     private AccountsService accountsService;
     private FindByEmailClient findByEmailClient;
@@ -34,7 +35,7 @@ public class AccountsController{
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Accounts searchById(@PathVariable Integer id) throws AccountsExcept{
         try {
             return accountsService.searchById(id);
@@ -88,7 +89,17 @@ public class AccountsController{
         }
     }
 
-    @DeleteMapping("user/{userId}")
+    @DeleteMapping("/email/{email}")
+    public void deleteByEmail(@PathVariable String email) throws AccountsExcept {
+        try{
+            accountsService.deleteByEmail(email);
+        }catch (Exception e) {
+            throw new AccountsExcept("Erro ao deletar email. Erro: " + e.getMessage());
+        }
+
+    }
+
+    @DeleteMapping("/user/{userId}")
     public void deleteAllUserAccounts(@PathVariable Integer userId) throws AccountsExcept{
         try {
             accountsService.deleteAllUserAccounts(userId);
@@ -97,7 +108,7 @@ public class AccountsController{
         {
             throw new AccountsExcept(e.getMessage());
         }
-        }
+    }
 
     @DeleteMapping
     public void deleteALL() throws AccountsExcept{
@@ -111,16 +122,43 @@ public class AccountsController{
     }
 
     @PostMapping("/accountMonitored/{userId}/{email}")
-    public ResponseEntity <String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
+    public ResponseEntity<String> accountMonitored(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
         try {
-            findByEmailClient
+            List<FindByEmailResponse> list = findByEmailClient
                     .findByEmailResponseFlux(email)
-                    .doOnNext(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId))
-                    .subscribe();
+                    .collectList()
+                    .block();
+
+            if (list == null || list.isEmpty()) {
+                accountsService.saveEmailWithNoBreaches(email, userId);
+            } else {
+                list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
+            }
+
             return ResponseEntity.ok("Account added successfully");
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
+            throw new AccountsExcept(e.getMessage());
+        }
+    }
+
+    @PutMapping("/refresh/{userId}/{email}")
+    public ResponseEntity<String> refreshAccount(@PathVariable Integer userId, @PathVariable String email) throws AccountsExcept {
+        try {
+            List<FindByEmailResponse> list = findByEmailClient
+                    .findByEmailResponseFlux(email)
+                    .collectList()
+                    .block();
+
+            if (list == null || list.isEmpty()) {
+                return ResponseEntity.ok("No breaches found, keeping existing data");
+            }
+
+            accountsService.deleteByUserIdAndEmail(userId, email);
+            list.forEach(dto -> accountsService.saveFromResponseEmailWebClientHIBP(dto, email, userId));
+
+            return ResponseEntity.ok("Refreshed successfully");
+        } catch (Exception e) {
             throw new AccountsExcept(e.getMessage());
         }
     }

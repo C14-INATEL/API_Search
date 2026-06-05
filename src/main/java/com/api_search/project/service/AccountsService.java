@@ -63,6 +63,14 @@ public class AccountsService {
         }
     }
 
+    public void deleteByEmail(String email) throws  AccountsExcept{
+        try {
+            accountsRepository.deleteByEmail(email);
+        }catch (Exception e){
+            throw new AccountsExcept(e.getMessage());
+        }
+    }
+
     public void deleteByid(Integer id) throws AccountsExcept{
         try{
             accountsRepository.deleteById(id);
@@ -115,6 +123,22 @@ public class AccountsService {
         }
         catch (Exception e)
         {
+            throw new AccountsExcept(e.getMessage());
+        }
+
+    }
+    public void saveEmailWithNoBreaches(String email, Integer userId) {
+        Accounts accounts = new Accounts();
+        accounts.setUserId(userId);
+        accounts.setEmailMonitored(email);
+        accountsRepository.save(accounts);
+    }
+
+    @Transactional
+    public void deleteByUserIdAndEmail(Integer userId, String email) throws AccountsExcept {
+        try {
+            accountsRepository.deleteByUserIdAndEmailMonitored(userId, email);
+        } catch (Exception e) {
             throw new AccountsExcept(e.getMessage());
         }
     }

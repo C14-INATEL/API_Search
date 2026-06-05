@@ -1,6 +1,7 @@
 package com.api_search.project.response;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -19,14 +20,32 @@ public class FindByEmailResponse {
     private OffsetDateTime AddedDate;
     private OffsetDateTime ModifiedDate;
     private List<String> DataClasses;
+
+    @JsonProperty("IsVerified")
     private boolean IsVerified;
+
+    @JsonProperty("IsFabricated")
     private boolean IsFabricated;
+
+    @JsonProperty("IsSensitive")
     private boolean IsSensitive;
+
+    @JsonProperty("IsRetired")
     private boolean IsRetired;
+
+    @JsonProperty("IsSpamList")
     private boolean IsSpamList;
+
+    @JsonProperty("IsMalware")
     private boolean IsMalware;
+
+    @JsonProperty("IsSubscriptionFree")
     private boolean IsSubscriptionFree;
+
+    @JsonProperty("IsStealerLog")
     private boolean IsStealerLog;
+
+    // getters and setters
 
     public String getName() {
         return Name;

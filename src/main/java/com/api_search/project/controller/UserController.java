@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api-search/users")
 public class UserController {
     private UserService userService;
 
@@ -51,6 +51,17 @@ public class UserController {
         {
             throw new UserExcept(e.getMessage());
         }
+    }
+
+    @GetMapping("/login/{email}/{password}")
+    public Integer searchUserWithEmailPassword(@PathVariable String email,@PathVariable String password) throws UserExcept {
+      try{
+        return  userService.searchUserWithEmailPassword(email,password);
+      }
+      catch (Exception e)
+      {
+          throw new UserExcept(e.getMessage());
+      }
     }
 
     @GetMapping("/{id}/exist")

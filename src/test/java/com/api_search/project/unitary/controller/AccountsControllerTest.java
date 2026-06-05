@@ -36,7 +36,7 @@ public class AccountsControllerTest {
     void shouldReturnAccountsById() throws Exception {
         when(accountsService.searchById(1)).thenReturn(null);
 
-        mockMvc.perform(get("/accounts/1"))
+        mockMvc.perform(get("/api-search/accounts/1"))
                 .andExpect(status().isOk());
     }
 
@@ -44,7 +44,7 @@ public class AccountsControllerTest {
     void shouldCheckIfAccountExists() throws Exception {
         when(accountsService.existsByid(1)).thenReturn(true);
 
-        mockMvc.perform(get("/accounts/1/exist"))
+        mockMvc.perform(get("/api-search//accounts/1/exist"))
                 .andExpect(status().isOk());
     }
 
@@ -52,13 +52,13 @@ public class AccountsControllerTest {
     void shouldGetAllAccounts() throws Exception {
         when(accountsService.searchAll()).thenReturn(java.util.List.of());
 
-        mockMvc.perform(get("/accounts"))
+        mockMvc.perform(get("/api-search/accounts"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void shouldSaveAccount() throws Exception {
-        mockMvc.perform(post("/accounts")
+        mockMvc.perform(post("/api-search/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"email\":\"test@example.com\"}"))
                 .andExpect(status().isOk());
@@ -70,13 +70,13 @@ public class AccountsControllerTest {
     void shouldReturnAccountsByUserId() throws Exception {
         when(accountsService.searchAccountsByUser(1)).thenReturn(List.of());
 
-        mockMvc.perform(get("/accounts/user/1"))
+        mockMvc.perform(get("/api-search/accounts/user/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void shouldDeleteById() throws Exception {
-        mockMvc.perform(delete("/accounts/1"))
+        mockMvc.perform(delete("/api-search/accounts/1"))
                 .andExpect(status().isOk());
 
         verify(accountsService, times(1)).deleteByid(1);
@@ -84,7 +84,7 @@ public class AccountsControllerTest {
 
     @Test
     void shouldDeleteAllUserAccounts() throws Exception {
-        mockMvc.perform(delete("/accounts/user/1"))
+        mockMvc.perform(delete("/api-search/accounts/user/1"))
                 .andExpect(status().isOk());
 
         verify(accountsService, times(1)).deleteAllUserAccounts(1);
@@ -92,23 +92,76 @@ public class AccountsControllerTest {
 
     @Test
     void shouldDeleteAll() throws Exception {
-        mockMvc.perform(delete("/accounts"))
+        mockMvc.perform(delete("/api-search/accounts"))
                 .andExpect(status().isOk());
 
         verify(accountsService, times(1)).deleteALL();
     }
 
     @Test
-    void shouldMonitorAccount() throws Exception {
+    void shouldMonitorAccountWithBreaches() throws Exception {
         when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
                 .thenReturn(Flux.just(new FindByEmailResponse()));
 
-        mockMvc.perform(post("/accounts/accountMonitored/1/test@example.com"))
+        mockMvc.perform(post("/api-search/accounts/accountMonitored/1/test@example.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Account added successfully"));
 
         verify(accountsService, times(1))
                 .saveFromResponseEmailWebClientHIBP(any(), eq("test@example.com"), eq(1));
+    }
+
+    @Test
+    void shouldMonitorAccountWithNoBreaches() throws Exception {
+        when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
+                .thenReturn(Flux.empty());
+
+        mockMvc.perform(post("/api-search/accounts/accountMonitored/1/test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Account added successfully"));
+
+        verify(accountsService, times(1))
+                .saveEmailWithNoBreaches(eq("test@example.com"), eq(1));
+    }
+
+    @Test
+    void shouldRefreshAccountWithBreaches() throws Exception {
+        when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
+                .thenReturn(Flux.just(new FindByEmailResponse()));
+
+        mockMvc.perform(put("/api-search/accounts/refresh/1/test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Refreshed successfully"));
+
+        verify(accountsService, times(1))
+                .deleteByUserIdAndEmail(eq(1), eq("test@example.com"));
+
+        verify(accountsService, times(1))
+                .saveFromResponseEmailWebClientHIBP(any(), eq("test@example.com"), eq(1));
+    }
+
+    @Test
+    void shouldRefreshAccountWithNoBreaches() throws Exception {
+        when(findByEmailClient.findByEmailResponseFlux("test@example.com"))
+                .thenReturn(Flux.empty());
+
+        mockMvc.perform(put("/api-search/accounts/refresh/1/test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("No breaches found, keeping existing data"));
+
+        verify(accountsService, never())
+                .deleteByUserIdAndEmail(any(), any());
+
+        verify(accountsService, never())
+                .saveEmailWithNoBreaches(any(), any());
+    }
+
+    @Test
+    void shouldDeleteByEmail() throws Exception {
+        mockMvc.perform(delete("/api-search/accounts/email/test@example.com"))
+                .andExpect(status().isOk());
+
+        verify(accountsService, times(1)).deleteByEmail("test@example.com");
     }
 }
 

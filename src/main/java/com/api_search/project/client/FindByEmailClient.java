@@ -7,13 +7,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+
+import java.time.Duration;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Service
-@Slf4j // annotation that will automatically log the data
+@Slf4j
 public class FindByEmailClient {
     private final WebClient webClient;
     private final String apiKey;
@@ -32,18 +36,40 @@ public class FindByEmailClient {
                     .get()
                     .uri("/breachedAccount/{email}?truncateResponse=false", email)
                     .header("hibp-api-key", apiKey)
+                    .header("User-Agent", "api-search-app")
                     .accept(APPLICATION_JSON)
                     .retrieve()
-                    .onStatus(HttpStatusCode::is5xxServerError, response ->
-                            Mono.error(new RuntimeException("Error 5xx: server not found"))
+                    .onStatus(
+                            status -> status.value() == 404,
+                            response -> Mono.error(new FindByEmailExcept())
                     )
-                    .onStatus(HttpStatusCode::is4xxClientError, error -> Mono.error(new RuntimeException("Verify the parameters ")))
-                    .bodyToFlux(FindByEmailResponse.class);
-        }
-        catch (Exception e)
-        {
+                    .onStatus(
+                            HttpStatusCode::is4xxClientError,
+                            error -> Mono.error(new RuntimeException("Verify the parameters"))
+                    )
+                    .onStatus(
+                            HttpStatusCode::is5xxServerError,
+                            response -> Mono.error(new RuntimeException("Error 5xx: server not found"))
+                    )
+                    .bodyToFlux(FindByEmailResponse.class)
+                    .doOnNext(item -> log.info("HIBP retornou breach: {}", item))
+                    .doOnComplete(() -> log.info("HIBP completou para [{}]", email))
+                    .doOnError(err -> log.error("HIBP erro para [{}]: {}", email, err.getMessage()))
+                    .retryWhen(
+                            Retry.backoff(3, Duration.ofSeconds(2))
+                                    .filter(ex -> !(ex instanceof WebClientResponseException)
+                                            && !(ex instanceof RuntimeException))
+                    )
+                    .onErrorResume(FindByEmailExcept.class, ex -> {
+                        log.info("Nenhum vazamento encontrado para [{}]", email);
+                        return Flux.just(new FindByEmailResponse());
+                    })
+                    .onErrorResume(ex -> {
+                        log.warn("HIBP conexão falhou para [{}]: {}", email, ex.getMessage());
+                        return Flux.error(ex);
+                    });
+        } catch (Exception e) {
             throw new FindByEmailExcept(e.getMessage());
         }
     }
-
 }
