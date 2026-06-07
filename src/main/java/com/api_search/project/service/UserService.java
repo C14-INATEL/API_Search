@@ -4,6 +4,9 @@ import com.api_search.project.entity.User;
 import com.api_search.project.excepetion.UserExcept;
 import com.api_search.project.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -18,11 +21,9 @@ public class UserService {
 
     public void save(User user) throws UserExcept {
         try{
-            if (user.getPassword() == null) {
-                throw new RuntimeException("PASSWORD IS NULL");
-            }
-
-            String hash = hashCrypt(user.getPassword());
+            if (user.getPassword() == null) throw new RuntimeException("PASSWORD IS NULL");
+            String decoded = URLDecoder.decode(user.getPassword(), StandardCharsets.UTF_8);
+            String hash = hashCrypt(decoded);
             user.setPassword(hash);
 
             userRepository.save(user);
@@ -56,15 +57,12 @@ public class UserService {
 
     public Integer searchUserWithEmailPassword(String email, String password) throws UserExcept {
         try {
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+            String decoded = URLDecoder.decode(password, StandardCharsets.UTF_8);
+                    User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-            boolean validPassword = BCrypt.checkpw(password, user.getPassword());
-
-            if (!validPassword) {
-                throw new RuntimeException("Invalid Password");
-            }
-
+            boolean validPassword = BCrypt.checkpw(decoded, user.getPassword());
+            if (!validPassword) throw new RuntimeException("Invalid Password");
+            System.out.println(decoded);
             return user.getId();
 
         } catch (Exception e) {
