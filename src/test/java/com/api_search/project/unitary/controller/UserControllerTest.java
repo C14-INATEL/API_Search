@@ -62,14 +62,15 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
-
     @Test
     void shouldReturnUserIdWhenEmailAndPasswordAreValid() throws Exception {
 
         when(userService.searchUserWithEmailPassword("test@email.com", "123456"))
                 .thenReturn(1);
 
-        mockMvc.perform(get("/api-search/users/login/test@email.com/123456"))
+        mockMvc.perform(post("/api-search/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"test@email.com\",\"password\":\"123456\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
     }
@@ -80,7 +81,9 @@ public class UserControllerTest {
         when(userService.searchUserWithEmailPassword("test@email.com", "wrongPassword"))
                 .thenThrow(new RuntimeException("Invalid Password"));
 
-        mockMvc.perform(get("/api-search/users/login/test@email.com/wrongPassword"))
+        mockMvc.perform(post("/api-search/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"test@email.com\",\"password\":\"wrongPassword\"}"))
                 .andExpect(status().is5xxServerError());
     }
 
